@@ -15,15 +15,15 @@
 
 # React Diagram
 - App
-  -Sign IN  
+  - Sign IN  
     - Home
         - Header
         - Details
     - Favorites
-      -Added to Favorites
+      - Added to Favorites
     - Post
-        -Add Rental 
-        -Modify Listing     
+        - Add Rental 
+        - Modify Listing     
 
     - Listings
         - Rentals
@@ -37,5 +37,5 @@
 - Comments and reviews on homes
 - Geocoding
 
- <img width="1680" alt="Screen Shot 2023-10-13 at 3 03 50 PM" src="https://github.com/Baileyb95/AirBnBailey/assets/108492331/9eb03f30-fac2-4abd-9357-8698ce710dbf">
+
 <img width="1330" alt="Screen Shot 2023-10-26 at 8 41 28 AM" src="https://github.com/Baileyb95/AirBnBailey/assets/108492331/90c37d79-6560-482a-a2bd-c5232c481a95">
