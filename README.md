@@ -2,36 +2,39 @@
 (Mock) Air BnBailey is a web application that allows users to create an account one for business side to make listings, modify listings, and delete lisitings. The have a consumer side to add listings to the favorites. 
 
 # Functionality
-    - Create : listings, accounts
-    - Read : listing
-    - UPDATE : listings, accounts
-    - DELETE : listing, accounts
+- Create : listings, users, booking, review
+- Read : listings, users, booking, review
+- UPDATE : listings, users, booking, review
+- DELETE : listings, users, booking, review
 
 # API routes
-- /Booker /id, GET, POST, DELETE
-- /LISTING / GET, POST, PATCH, DELETE
-- /REVIEWS / GET, DELETE
-- /RENTAL / GET, POST, PATCH
+/Users GET, POST
+/Users/id, GET, POST, PATCH, DELETE
+/Listings GET, POST
+/Listings/id GET, POST, PATCH, DELETE
+/Reviews GET, POST
+/Reviews/id  GET, POST, PATCH, DELETE
+/Bookings GET, POST
+/Bookings/id  GET, POST, PATCH, DELETE
 
 # React Diagram
-- App
-  - Sign IN  
-    - Home
-        - Header
-        - Details
-    - Favorites
-      - Added to Favorites
-    - Post
-        - Add Rental 
-        - Modify Listing     
+Route : / 
+Purpose USER SIGN IN
 
-    - Listings
-        - Rentals
-            - Listing of property
-                - GeoMap
-                - Comments
-    - Search
+Route : /home
+Purpose lets users navigate to either their Favorited listings section or General Listings
 
+Route: /home / listings
+Purpose lets users to look at the listings posted for them to book
+
+Route: /home /listings /id
+Purpose lets users look at single listing and to allow a check out or to place in their favorites
+
+Route /home /favorites
+Purpose lets users look at all the listings they have favorited
+
+Route /home /favorites /id
+Purpose lets users look at individual listing that they have previously have favorited and see reviews/place review. 
 
 # Stretch Goals
 - Comments and reviews on homes
