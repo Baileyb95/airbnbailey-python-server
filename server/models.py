@@ -15,7 +15,7 @@ class User(db.Model):
     last_name = db.Column(db.String(32))
     phone_number = db.Column(db.String(32))
 
-class Booking(db.model):
+class Booking(db.Model):
     __tablename__ = "bookings"
     id = db.Column(db.String(32), primary_key=True, unique=True, default=get_uuid)
     user_id = db.Column(db.String(32), db.ForeignKey("users.id"), nullable=False)
@@ -30,8 +30,8 @@ class Review(db.Model):
     rating = db.Column(db.Integer, nullable=False)
     comment = db.Column(db.Text, nullable=False)
 
-class Listing(db.model):
-    __tablenaem__ = "listings"
+class Listing(db.Model):
+    __tablename__ = "listings"
     id = db.Column(db.String(32), primary_key=True, unique=True, default=get_uuid)
     user_id = db.Column(db.String(32), db.ForeignKey("users.id"), nullable=False)
     title = db.Column(db.String(128), nullable=False)
