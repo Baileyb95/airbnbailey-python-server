@@ -4,13 +4,20 @@ from flask_cors import CORS, cross_origin
 from flask_session import Session
 from config import ApplicationConfig
 from models import db, User, Listing, Booking, Review
+import os
+
+
+
+
 
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
 
+app.secret_key = os.urandom(16).hex()
+
 bcrypt = Bcrypt(app)
 CORS(app, supports_credentials=True)
-server_session = Session(app)
+#server_session = Session(app)
 db.init_app(app)
 
 with app.app_context():
@@ -29,14 +36,13 @@ def get_current_user():
         "email": user.email
     }) 
 
-@app.route("/register", methods=["GET", "POST", "PATCH", "DELETE"])
+@app.route("/register", methods=["POST"])
 def register_user():
     email = request.json["email"]
     password = request.json["password"]
     first_name = request.json["first_name"]
     last_name = request.json["last_name"]
     phone_number = request.json["phone_number"]
-
 
     user_exists = User.query.filter_by(email=email).first() is not None
 
@@ -55,25 +61,27 @@ def register_user():
         "email": new_user.email
     })
 
-@app.route("/login", methods=["GET", "POST", "PATCH", "DELETE"])
+@app.route("/login", methods=["POST"])
 def login_user():
-    email = request.json["email"]
-    password = request.json["password"]
+    if request.method == "POST":
+        print("in login")
+        email = request.json["email"]
+        password = request.json["password"]
 
-    user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(email=email).first()
 
-    if user is None:
-        return jsonify({"error": "Unauthorized"}), 401
+        if user is None:
+            return jsonify({"error": "Unauthorized"}), 401
 
-    if not bcrypt.check_password_hash(user.password, password):
-        return jsonify({"error": "Unauthorized"}), 401
-    
-    session["user_id"] = user.id
+        if not bcrypt.check_password_hash(user.password, password):
+            return jsonify({"error": "Unauthorized"}), 401
+        
+        session["user_id"] = user.id
 
-    return jsonify({
-        "id": user.id,
-        "email": user.email
-    })
+        return jsonify({
+            "id": user.id,
+            "email": user.email
+        })
 
 @app.route("/logout", methods=["GET", "POST", "PATCH", "DELETE"])
 def logout_user():
@@ -93,10 +101,16 @@ def create_listing():
     # Extract property details from the request
     title = request.json["title"]
     description = request.json["description"]
+    image_url = request.json["image_url"]
+    address = request.json["address"]
+    city = request.json["city"]
+    state = request.json["state"]
+    zip_code = request.json["zip_code"]
+    price = request.json["price"]
     # Add more fields as needed
     
     # Create a new listing
-    new_listing = Listing(user_id=user_id, title=title, description=description)
+    new_listing = Listing(user_id=user_id, title=title, description=description, image_url=image_url, address=address, city=city, state=state, zip_code=zip_code, price=price)
     # Add more fields as needed
     db.session.add(new_listing)
     db.session.commit()
@@ -113,14 +127,29 @@ def create_booking():
         return jsonify({"error": "Unauthorized"}), 401
     
     # Extract booking details from the request
+    def check_overlap(listing_id, check_in, check_out):
+        """
+        Check for date overlaps with existing bookings for the property
+        """
+        bookings = Booking.query.filter_by(listing_id=listing_id).all()
+        for booking in bookings:
+            if check_in < booking.check_out and check_out > booking.check_in:
+                return True
+        return False
+
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return jsonify({"error": "Unauthorized"}), 401
+
     listing_id = request.json["listing_id"]
     check_in = request.json["check_in"]
     check_out = request.json["check_out"]
-    
+
     # Check for date overlaps with existing bookings for the property
     if check_overlap(listing_id, check_in, check_out):
         return jsonify({"error": "Booking date overlap"}), 400
-    
+
     # Create a new booking
     new_booking = Booking(user_id=user_id, listing_id=listing_id, check_in=check_in, check_out=check_out)
     db.session.add(new_booking)
@@ -206,4 +235,4 @@ def delete_listing(listing_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5000)

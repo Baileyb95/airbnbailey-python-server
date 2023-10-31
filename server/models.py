@@ -11,9 +11,9 @@ class User(db.Model):
     id = db.Column(db.String(32), primary_key=True, unique=True, default=get_uuid)
     email = db.Column(db.String(345), unique=True)
     password = db.Column(db.Text, nullable=False)
-    first_name = db.Column(db.String(32))
-    last_name = db.Column(db.String(32))
-    phone_number = db.Column(db.String(32))
+    first_name = db.Column(db.String(64), nullable=False)
+    last_name = db.Column(db.String(64), nullable=False)
+    phone_number = db.Column(db.String(16), nullable=False)
 
 class Booking(db.Model):
     __tablename__ = "bookings"
@@ -34,6 +34,7 @@ class Listing(db.Model):
     __tablename__ = "listings"
     id = db.Column(db.String(32), primary_key=True, unique=True, default=get_uuid)
     user_id = db.Column(db.String(32), db.ForeignKey("users.id"), nullable=False)
+    image_url = db.Column(db.String(128), nullable=False)
     title = db.Column(db.String(128), nullable=False)
     description = db.Column(db.Text, nullable=False)
     address = db.Column(db.String(128), nullable=False)
