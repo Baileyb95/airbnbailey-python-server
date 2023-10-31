@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
-        firstName: '',
-        lastName: '',
-        phoneNumber: '',
+        first_name: '',
+        last_name: '',
+        phone_number: '',
     });
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -17,8 +19,31 @@ const RegisterPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Send registration data to the backend (e.g., make a POST request to /register)
-        // You can use the Fetch API or a library like Axios for this purpose
+
+        // Send registration data to the backend
+        fetch('http://127.0.0.1:5000/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        })
+        .then(response => {
+            if (response.status === 200) {
+                // Registration was successful, you can navigate to a different page
+                navigate('/login');
+            } else if (response.status === 409) {
+                // User already exists
+                // Handle this case, such as displaying an error message
+            } else {
+                // Handle other registration errors
+                // For example, show an error message if registration fails for any other reason
+            }
+        })
+        .catch(error => {
+            // Handle fetch error
+            console.error('Registration error:', error);
+        });
     };
 
     return (
@@ -48,34 +73,34 @@ const RegisterPage = () => {
                     />
                 </div>
                 <div>
-                    <label htmlFor="firstName">First Name:</label>
+                    <label htmlFor="first_name">First Name:</label>
                     <input
                         type="text"
-                        id="firstName"
-                        name="firstName"
-                        value={formData.firstName}
+                        id="first_name"
+                        name="first_name"
+                        value={formData.first_name}
                         onChange={handleChange}
                         required
                     />
                 </div>
                 <div>
-                    <label htmlFor="lastName">Last Name:</label>
+                    <label htmlFor="last_name">Last Name:</label>
                     <input
                         type="text"
-                        id="lastName"
-                        name="lastName"
-                        value={formData.lastName}
+                        id="last_name"
+                        name="last_name"
+                        value={formData.last_name}
                         onChange={handleChange}
                         required
                     />
                 </div>
                 <div>
-                    <label htmlFor="phoneNumber">Phone Number:</label>
+                    <label htmlFor="phone_number">Phone Number:</label>
                     <input
                         type="text"
-                        id="phoneNumber"
-                        name="phoneNumber"
-                        value={formData.phoneNumber}
+                        id="phone_number"
+                        name="phone_number"
+                        value={formData.phone_number}
                         onChange={handleChange}
                         required
                     />

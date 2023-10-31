@@ -6,10 +6,6 @@ from config import ApplicationConfig
 from models import db, User, Listing, Booking, Review
 import os
 
-
-
-
-
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
 
@@ -202,7 +198,6 @@ def update_listing(listing_id):
         listing.title = request.json["title"]
     if "description" in request.json:
         listing.description = request.json["description"]
-    # Add more fields as needed
     
     db.session.commit()
     
@@ -225,6 +220,7 @@ def delete_listing(listing_id):
     
     # Check if the user is the owner of the listing
     if user_id != listing.user_id:
+        
         return jsonify({"error": "Unauthorized to delete this listing"}), 403
     
     # Delete the listing
