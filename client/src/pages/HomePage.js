@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const HomePage = () => {
     return (
-        console.log("mesage"),
+        console.log("message"),
         <div>
             <h1>Welcome to AirbnBailey</h1>
             <p>Please log in or register to continue.</p>

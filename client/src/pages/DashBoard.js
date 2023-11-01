@@ -8,7 +8,7 @@ const DashboardPage = () => {
         fetch('http://127.0.0.1:5000/logout', {
             method: 'DELETE'
         })
-        navigate('/login');
+        navigate('/');
     };
 
     return (
@@ -50,5 +50,8 @@ const DashboardPage = () => {
         </div>
     );
 };
+
+
+
 
 export default DashboardPage;

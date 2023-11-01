@@ -9,11 +9,13 @@ import os
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
 
+Session(app)
+
 app.secret_key = os.urandom(16).hex()
 
 bcrypt = Bcrypt(app)
 CORS(app, supports_credentials=True)
-#server_session = Session(app)
+cross_origin(supports_credentials=True)
 db.init_app(app)
 
 with app.app_context():
@@ -50,7 +52,7 @@ def register_user():
     db.session.add(new_user)
     db.session.commit()
     
-    session["user_id"] = new_user.id
+    # session["user_id"] = new_user.id
 
     return jsonify({
         "id": new_user.id,
@@ -72,29 +74,37 @@ def login_user():
         if not bcrypt.check_password_hash(user.password, password):
             return jsonify({"error": "Unauthorized"}), 401
         
-        session["user_id"] = user.id
+        # print("IM PRINTING THIS SESSION LOOK AT ME")
+        # session["user_id"] = user.id
+        # print(session["user_id"])
 
         return jsonify({
             "id": user.id,
             "email": user.email
         })
 
-@app.route("/logout", methods=["GET", "POST", "PATCH", "DELETE"])
+@app.route("/logout", methods=["DELETE"])
 def logout_user():
-    session.pop("user_id")
-    return "200"
+    # session["user_id"] = None
+    return jsonify({"message": "Logged out successfully"})
 
 
 # Property Listing (Create)
 @app.route("/listings", methods=["POST"])
 def create_listing():
+    # print("IM RIGHT HERE!!!")
+    # print(session)
     # Get user ID from the session or other authentication mechanism
-    user_id = session.get("user_id")
+    # user_id = session.get("user_id")
+    user_id = request.json["user_id"]
+
+    print("HERE IS THE USER ID!!! LOOK AT ME!!!", user_id)
     
-    if not user_id:
+    if not User.query.filter_by(id=user_id).first():
         return jsonify({"error": "Unauthorized"}), 401
     
     # Extract property details from the request
+
     title = request.json["title"]
     description = request.json["description"]
     image_url = request.json["image_url"]
@@ -102,11 +112,10 @@ def create_listing():
     city = request.json["city"]
     state = request.json["state"]
     zip_code = request.json["zip_code"]
-    price = request.json["price"]
     # Add more fields as needed
     
     # Create a new listing
-    new_listing = Listing(user_id=user_id, title=title, description=description, image_url=image_url, address=address, city=city, state=state, zip_code=zip_code, price=price)
+    new_listing = Listing(user_id=user_id, title=title, description=description, image_url=image_url, address=address, city=city, state=state, zip_code=zip_code)
     # Add more fields as needed
     db.session.add(new_listing)
     db.session.commit()

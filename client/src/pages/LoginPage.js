@@ -27,6 +27,7 @@ const LoginPage = () => {
         })
         .then(response => {
             if (response.status === 200) {
+                response.json().then(data => {localStorage.id = data.id});
                 // Login was successful, redirect to the dashboard
                 navigate('/dashboard');
             } else if (response.status === 401) {
