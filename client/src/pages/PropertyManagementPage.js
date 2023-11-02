@@ -11,6 +11,7 @@ const PropertyManagementPage = () => {
         city: '',
         state: '',
         zip_code: '',
+        price: '',
     });
 
     const handleChange = (e) => {
@@ -108,6 +109,17 @@ const PropertyManagementPage = () => {
                         required
                     />
                 </div>
+                <div>
+                    <label htmlFor="price">Price:</label>
+                    <input
+                        type="text"
+                        id="price"
+                        name="price"
+                        value={formData.price}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>,
                 <button type="submit">Submit Listing</button>
                 <div>
                     <Link to="/listings-Page">
