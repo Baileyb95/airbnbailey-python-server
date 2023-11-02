@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import ListingPage from './ListingPage';
 
 const DashboardPage = () => {
     const navigate = useNavigate();
@@ -17,27 +16,12 @@ const DashboardPage = () => {
         });
     };
 
-    const Listings = () => {
-        const [listings, setListings] = useState([]);
-
-        useEffect(() => {
-            fetch('http://127.0.0.1:5000/listings')
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-                setListings(data);
-            })
-            .catch((error) => {
-                console.error('Error fetching property listings:', error);
-            });
-        }, []); 
-
         return (
             <div>
                 <h2>Dashboard</h2>
                 <div>
-                    <Link to="/listings-page">
-                        <button>View Listings</button>
+                    <Link to="/rentals">
+                        <button>View Rentals</button>
                     </Link>
                 </div>
                 <div>
@@ -60,22 +44,19 @@ const DashboardPage = () => {
                         <button>View Favorites</button>
                     </Link>
                 </div>
-                <div>
+                {/* <div>
                     <Link to="/settings">
                         <button>Account Settings</button>
                     </Link>
-                </div>
+                </div> */}
                 <div>
                     <button onClick={handleLogout}>Logout</button>
                 </div>
                 <div>
-                    <ListingPage list={listings} /> {/* Render ListingPage here */}
+                  {/* <ListingPage list={listings} />  */}
                 </div>
             </div>
         );
     };
-
-    return <Listings />; // Render the Listings component
-};
 
 export default DashboardPage;

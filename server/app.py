@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, session, make_response
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS, cross_origin
 from flask_session import Session
@@ -88,14 +88,31 @@ def logout_user():
     # session["user_id"] = None
     return jsonify({"message": "Logged out successfully"})
 
-
-# Property Listing (Create)
-@app.route("/listings", methods=["GET"])
-def get_listings():
-    if request.method == "GET":
+@app.route('/listings', methods=['GET'])
+def listings():
+    if request.method == 'GET':
         listings = Listing.query.all()
         listings_data = [listing.to_dict() for listing in listings]
         return jsonify(listings_data)
+    # elif request.method == 'POST':
+    #         user_id = request.json["user_id"]
+    # if not User.query.filter_by(id=user_id).first():
+#         return jsonify({"error": "Unauthorized"}), 401
+
+#         data = request.json
+#         new_listing = Listing(
+#             title=data['title'],
+#             description=data['description'],
+#             image_url=data.get('image_url', ''),
+#             address=data['address'],
+#             city=data['city'],
+#             state=data['state'],
+#             zip_code=data['zip_code']
+#         )
+#         db.session.add(new_listing)
+#         db.session.commit()
+#         return jsonify({'message': 'Property listed successfully'})
+
 
 @app.route("/listings", methods=["POST"])
 

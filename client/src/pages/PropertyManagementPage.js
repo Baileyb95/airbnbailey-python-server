@@ -109,6 +109,11 @@ const PropertyManagementPage = () => {
                     />
                 </div>
                 <button type="submit">Submit Listing</button>
+                <div>
+                    <Link to="/listings-Page">
+                        <button>View Listings</button>
+                    </Link>
+                </div>
                 <div><Link to="/dashboard"><button>DashBoard</button></Link> </div>
             </form>
         </div>
