@@ -42,6 +42,7 @@ class Listing(db.Model):
     city = db.Column(db.String(50), nullable=False)
     state = db.Column(db.String(50), nullable=False)
     zip_code = db.Column(db.String(10), nullable=False)
+    price = db.Column(db.Integer, nullable=False)
 
     def to_dict(self):
         return {
@@ -54,16 +55,17 @@ class Listing(db.Model):
             'city': self.city,
             'state': self.state,
             'zip_code': self.zip_code,
+            'price': self.price
         }
-class Favorite(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    house_id = db.Column(db.Integer, db.ForeignKey('house.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+# class Favorite(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     house_id = db.Column(db.Integer, db.ForeignKey('house.id'))
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def to_dict(self):
-        # Return a dictionary representation of the favorite house
-        return {
-            "id": self.id,
-            "house": self.house.to_dict(),  # Include house details
-            "user_id": self.user_id
-        }
+#     def to_dict(self):
+#         # Return a dictionary representation of the favorite house
+#         return {
+#             "id": self.id,
+#             "house": self.house.to_dict(),  # Include house details
+#             "user_id": self.user_id
+#         }

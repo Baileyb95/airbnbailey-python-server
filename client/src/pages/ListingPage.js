@@ -1,7 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
 
 const Listings = () => {
+  const navigate = useNavigate();
   const [listings, setListings] = useState([]);
   const [selectedListing, setSelectedListing] = useState(null);
   const [updateFormData, setUpdateFormData] = useState({
@@ -25,6 +28,7 @@ const Listings = () => {
       });
   }, []);
 
+  console.log(listings);
   const handleDeleteListing = (id) => {
     fetch(`http://127.0.0.1:5000/listings/${id}`, {
       method: 'DELETE',
@@ -32,11 +36,17 @@ const Listings = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setListings(data);
+        // setListings(data);
+        
       })
       .catch((error) => {
         console.error('Error deleting property listing:', error);
-      });
+      })
+      .finally(() => {
+        navigate('/listings-Page');
+        window.location.reload();
+      })
+      ;
   };
 
   const handleUpdateFormChange = (event) => {
@@ -50,7 +60,7 @@ const Listings = () => {
   const handleUpdateListing = () => {
     const addUserToFormData = { ...updateFormData, user_id: localStorage.id };
     fetch(`http://127.0.0.1:5000/listings/${selectedListing.id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },

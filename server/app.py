@@ -73,10 +73,6 @@ def login_user():
 
         if not bcrypt.check_password_hash(user.password, password):
             return jsonify({"error": "Unauthorized"}), 401
-        
-        # print("IM PRINTING THIS SESSION LOOK AT ME")
-        # session["user_id"] = user.id
-        # print(session["user_id"])
 
         return jsonify({
             "id": user.id,
@@ -88,31 +84,50 @@ def logout_user():
     # session["user_id"] = None
     return jsonify({"message": "Logged out successfully"})
 
+#####################################################
+
 @app.route('/listings', methods=['GET'])
 def listings():
     if request.method == 'GET':
         listings = Listing.query.all()
         listings_data = [listing.to_dict() for listing in listings]
         return jsonify(listings_data)
-    # elif request.method == 'POST':
-    #         user_id = request.json["user_id"]
-    # if not User.query.filter_by(id=user_id).first():
-#         return jsonify({"error": "Unauthorized"}), 401
+    
+@app.route('/listings/<int:listing_id>', methods=['PATCH'])
+def update_listing(listing_id):
+    listing = Listing.query.get(listing_id)
 
-#         data = request.json
-#         new_listing = Listing(
-#             title=data['title'],
-#             description=data['description'],
-#             image_url=data.get('image_url', ''),
-#             address=data['address'],
-#             city=data['city'],
-#             state=data['state'],
-#             zip_code=data['zip_code']
-#         )
-#         db.session.add(new_listing)
-#         db.session.commit()
-#         return jsonify({'message': 'Property listed successfully'})
+    if not listing:
+        return jsonify({'message': 'Property not found'}, 404)
+    
+    user_id = request.json["user_id"]
 
+    print("HERE IS THE USER ID!!! LOOK AT ME!!!", user_id)
+    
+    if not User.query.filter_by(id=user_id).first():
+        return jsonify({"error": "Unauthorized"}), 401
+
+    data = request.get_json()
+
+    # Update only the fields that are present in the request data
+    for field in ['user_id', 'title', 'description', 'image_url', 'address', 'city', 'state', 'zip_code', 'price']:
+        if field in data:
+            setattr(listing, field, data[field])
+
+    db.session.commit()
+    return jsonify({'message': 'Property updated successfully'})
+
+    
+@app.route('/listings/<int:listing_id>', methods=['DELETE'])
+def delete(listing_id):
+    listing = Listing.query.get(listing_id)
+    if listing:
+        db.session.delete(listing)
+        db.session.commit()
+        return jsonify({'message': 'Property deleted successfully'})
+    else:
+        return jsonify({'message': 'Property not found'}, 404)
+  
 
 @app.route("/listings", methods=["POST"])
 
@@ -136,21 +151,24 @@ def create_listing():
     city = request.json["city"]
     state = request.json["state"]
     zip_code = request.json["zip_code"]
+    price = request.json["price"]
     # Add more fields as needed
     
     # Create a new listing
-    new_listing = Listing(user_id=user_id, title=title, description=description, image_url=image_url, address=address, city=city, state=state, zip_code=zip_code)
+    new_listing = Listing(user_id=user_id, title=title, description=description, image_url=image_url, address=address, city=city, state=state, zip_code=zip_code, price=price)
     # Add more fields as needed
     db.session.add(new_listing)
     db.session.commit()
     
     return jsonify({"message": "Property listed successfully"})
 
+######################################################################
+
 # Booking (Create and Check Overlap)
 @app.route("/bookings", methods=["POST"])
 def create_booking():
     # Get user ID from the session or other authentication mechanism
-    user_id = session.get("user_id")
+    user_id = request.json("user_id")
     
     if not user_id:
         return jsonify({"error": "Unauthorized"}), 401
@@ -166,7 +184,7 @@ def create_booking():
                 return True
         return False
 
-    user_id = session.get("user_id")
+    user_id = request.json("user_id")
 
     if not user_id:
         return jsonify({"error": "Unauthorized"}), 401
@@ -190,7 +208,7 @@ def create_booking():
 @app.route("/reviews", methods=["POST"])
 def create_review():
     # Get user ID from the session or other authentication mechanism
-    user_id = session.get("user_id")
+    user_id = request.json("user_id")
     
     if not user_id:
         return jsonify({"error": "Unauthorized"}), 401
@@ -207,60 +225,60 @@ def create_review():
     
     return jsonify({"message": "Review posted successfully"})
 
-# Property Listing Management (Patch)
-@app.route("/listings/<listing_id>", methods=["PATCH"])
-def update_listing(listing_id):
-    # Get user ID from the session or other authentication mechanism
-    user_id = session.get("user_id")
+# # Property Listing Management (Patch)
+# @app.route("/listings/<listing_id>", methods=["PATCH"])
+# def update_listing(listing_id):
+#     # Get user ID from the session or other authentication mechanism
+#     user_id = request.json("user_id")
     
-    if not user_id:
-        return jsonify({"error": "Unauthorized"}), 401
+#     if not user_id:
+#         return jsonify({"error": "Unauthorized"}), 401
     
-    # Find the listing by ID
-    listing = Listing.query.get(listing_id)
+#     # Find the listing by ID
+#     listing = Listing.query.get(listing_id)
     
-    if not listing:
-        return jsonify({"error": "Listing not found"}), 404
+#     if not listing:
+#         return jsonify({"error": "Listing not found"}), 404
     
-    # Check if the user is the owner of the listing
-    if user_id != listing.user_id:
-        return jsonify({"error": "Unauthorized to update this listing"}), 403
+#     # Check if the user is the owner of the listing
+#     if user_id != listing.user_id:
+#         return jsonify({"error": "Unauthorized to update this listing"}), 403
     
-    # Update the listing details
-    if "title" in request.json:
-        listing.title = request.json["title"]
-    if "description" in request.json:
-        listing.description = request.json["description"]
+#     # Update the listing details
+#     if "title" in request.json:
+#         listing.title = request.json["title"]
+#     if "description" in request.json:
+#         listing.description = request.json["description"]
     
-    db.session.commit()
+#     db.session.commit()
     
-    return jsonify({"message": "Listing updated successfully"})
+#     return jsonify({"message": "Listing updated successfully"})
 
-# Property Listing Management (Delete)
-@app.route("/listings/<listing_id>", methods=["DELETE"])
-def delete_listing(listing_id):
-    # Get user ID from the session or other authentication mechanism
-    user_id = session.get("user_id")
+# # Property Listing Management (Delete)
+# @app.route("/listings/<listing_id>", methods=["DELETE"])
+# def delete_listing(listing_id):
+#     # Get user ID from the session or other authentication mechanism
+#     user_id = request.json("user_id")
     
-    if not user_id:
-        return jsonify({"error": "Unauthorized"}), 401
+#     if not user_id:
+#         return jsonify({"error": "Unauthorized"}), 401
     
-    # Find the listing by ID
-    listing = Listing.query.get(listing_id)
+#     # Find the listing by ID
+#     listing = Listing.query.get(listing_id)
     
-    if not listing:
-        return jsonify({"error": "Listing not found"}), 404
+#     if not listing:
+#         return jsonify({"error": "Listing not found"}), 404
     
-    # Check if the user is the owner of the listing
-    if user_id != listing.user_id:
+#     # Check if the user is the owner of the listing
+#     if user_id != listing.user_id:
         
-        return jsonify({"error": "Unauthorized to delete this listing"}), 403
+#         return jsonify({"error": "Unauthorized to delete this listing"}), 403
     
-    # Delete the listing
-    db.session.delete(listing)
-    db.session.commit()
+#     # Delete the listing
+#     db.session.delete(listing)
+#     db.session.commit()
     
-    return jsonify({"message": "Listing deleted successfully"})
+#     return jsonify({"message": "Listing deleted successfully"})
 
 
 if __name__ == "__main__":
