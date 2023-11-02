@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, make_response
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS, cross_origin
 from flask_session import Session
@@ -90,13 +90,20 @@ def logout_user():
 
 
 # Property Listing (Create)
+@app.route("/listings", methods=["GET"])
+def get_listings():
+    if request.method == "GET":
+        listings = Listing.query.all()
+        listings_data = [listing.to_dict() for listing in listings]
+        return jsonify(listings_data)
+
 @app.route("/listings", methods=["POST"])
+
 def create_listing():
-    # print("IM RIGHT HERE!!!")
-    # print(session)
-    # Get user ID from the session or other authentication mechanism
-    # user_id = session.get("user_id")
-    user_id = request.json["user_id"]
+
+    if request.method == "POST":
+
+        user_id = request.json["user_id"]
 
     print("HERE IS THE USER ID!!! LOOK AT ME!!!", user_id)
     

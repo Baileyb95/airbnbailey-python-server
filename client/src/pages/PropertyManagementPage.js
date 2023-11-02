@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const PropertyManagementPage = () => {
     const [formData, setFormData] = useState({
@@ -27,7 +28,6 @@ const PropertyManagementPage = () => {
             body: JSON.stringify(addUserToFormData),
         });
         };
-
     return (
         <div>
             <h2>Property Management</h2>
@@ -109,6 +109,7 @@ const PropertyManagementPage = () => {
                     />
                 </div>
                 <button type="submit">Submit Listing</button>
+                <div><Link to="/dashboard"><button>DashBoard</button></Link> </div>
             </form>
         </div>
     );
