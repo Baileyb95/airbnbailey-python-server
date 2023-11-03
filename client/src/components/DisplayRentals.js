@@ -10,14 +10,17 @@ const DisplayRentals = ({ list }) => {
     const [checkInDate, setCheckInDate] = useState(new Date());
     const [checkOutDate, setCheckOutDate] = useState(new Date());
     const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+    const [booking, setBooking] = useState([]);
 
-    const handleBooking = () => {
+    const handleBooking = (booking) => {
+        setBooking(booking);
         setIsBookingModalOpen(true);
     }
 
     const handleConfirmBooking = () => {
         if (checkInDate && checkOutDate) {
             const bookingData = {
+                listing_id: booking,
                 check_in: checkInDate,
                 check_out: checkOutDate,
             };
@@ -83,7 +86,7 @@ const DisplayRentals = ({ list }) => {
           <p>Zip Code: {rental.zip_code}</p>
           <p>Price: {rental.price}</p>
           <button onClick={() => handleAddToFavorites(rental.id)}>Add to Favorites</button>
-            <button onClick={handleBooking}>Book Now</button>
+            <button onClick={() => handleBooking(rental.id)}>Book Now</button>
             {isBookingModalOpen && (
                 <div className="booking-modal">
                     <div className="booking-modal-content">

@@ -18,8 +18,8 @@ const Listings = () => {
   });
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/listings')
-      .then((response) => response.json())
+    fetch(`http://127.0.0.1:5000/user/${localStorage.getItem('id')}/listings`)
+    .then((response) => response.json())
       .then((data) => {
         console.log(data);
         setListings(data);

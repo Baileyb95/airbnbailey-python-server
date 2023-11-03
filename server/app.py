@@ -12,7 +12,7 @@ app.config.from_object(ApplicationConfig)
 
 Session(app)
 
-app.secret_key = os.urandom(16).hex()
+#app.secret_key = os.urandom(16).hex()
 
 bcrypt = Bcrypt(app)
 CORS(app, supports_credentials=True)
@@ -43,6 +43,14 @@ def get_user():
         return jsonify({"error": "User not found"}), 404
     user_data = [user.to_dict() for user in user]
     return jsonify(user_data)
+
+@app.route("/user/<string:user_id>/listings", methods=["GET"])
+def get_users_listings(user_id):
+   user = User.query.get(user_id)
+   if not user:
+       return jsonify({"error": "User not found"}), 404
+   user_listings = [listing.to_dict() for listing in user.listings]
+   return jsonify(user_listings)
 
 @app.route("/register", methods=["POST"])
 def register_user():
@@ -205,7 +213,7 @@ def create_booking():
     check_out_datetime = datetime.strptime(check_out_str, '%Y-%m-%dT%H:%M:%S.%fZ')
     user_id = request.json["user_id"]  # Get the authenticated user's ID
 
-    new_booking = Booking(user_id=user_id, check_in=check_in_datetime, check_out=check_out_datetime)
+    new_booking = Booking(user_id=user_id, check_in=check_in_datetime, check_out=check_out_datetime, listing_id=listing_id)
     db.session.add(new_booking)
     db.session.commit()
     return jsonify({'message': 'Booking created successfully'}), 201
