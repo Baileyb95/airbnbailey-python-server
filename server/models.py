@@ -6,6 +6,11 @@ db = SQLAlchemy()
 def get_uuid():
     return uuid4().hex
 
+favorites_association = db.Table('favorites_association',
+    db.Column('user_id', db.String(32), db.ForeignKey('users.id')),
+    db.Column('listing_id', db.Integer, db.ForeignKey('listings.id'))
+)
+
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.String(32), primary_key=True, unique=True, default=get_uuid)
@@ -15,6 +20,20 @@ class User(db.Model):
     last_name = db.Column(db.String(64), nullable=False)
     phone_number = db.Column(db.String(16), nullable=False)
 
+    listings = db.relationship("Listing", backref="user")
+    bookings = db.relationship("Booking", backref="user")
+    favorites = db.relationship("Listing", secondary=favorites_association, backref="users_who_favorited")
+
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'phone_number': self.phone_number
+        }
+
 
 class Booking(db.Model):
     __tablename__ = "bookings"
@@ -22,7 +41,9 @@ class Booking(db.Model):
     user_id = db.Column(db.String(32), db.ForeignKey("users.id"), nullable=False)
     check_in = db.Column(db.DateTime, nullable=False)
     check_out = db.Column(db.DateTime, nullable=False)
-    # listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'), nullable=False)
+
+    user_id = db.Column(db.String(32), db.ForeignKey("users.id"), nullable=False)
+    listing_id = db.Column(db.Integer, db.ForeignKey('listings.id'), nullable=False)
 
     def to_dict(self):
         return {
@@ -38,6 +59,18 @@ class Review(db.Model):
     booking_id = db.Column(db.String(32), db.ForeignKey("bookings.id"), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     comment = db.Column(db.Text, nullable=False)
+    user=db.relationship("User", backref="reviews")
+    booking=db.relationship("Booking", backref="reviews")
+
+    def to_dict(self):
+        return {
+            'user_id': self.user_id,
+            'booking_id': self.booking_id,
+            'rating': self.rating,
+            'comment': self.comment
+        }
+
+    
 
 class Listing(db.Model):
     __tablename__ = "listings"
@@ -52,8 +85,9 @@ class Listing(db.Model):
     zip_code = db.Column(db.String(10), nullable=False)
     price = db.Column(db.Integer, nullable=False)
 
-    # user=db.relationship("User", backref="listings")
-    # bookings = db.relationship("Booking", backref="listings")
+    user_id = db.Column(db.String(32), db.ForeignKey("users.id"), nullable=False)
+    bookings = db.relationship("Booking", backref="listing")
+    favorited_by = db.relationship("User", secondary=favorites_association, backref="listings_favorited")
 
     def to_dict(self):
         return {
@@ -68,15 +102,3 @@ class Listing(db.Model):
             'zip_code': self.zip_code,
             'price': self.price
         }
-# class Favorite(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     house_id = db.Column(db.Integer, db.ForeignKey('house.id'))
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-#     def to_dict(self):
-#         # Return a dictionary representation of the favorite house
-#         return {
-#             "id": self.id,
-#             "house": self.house.to_dict(),  # Include house details
-#             "user_id": self.user_id
-#         }

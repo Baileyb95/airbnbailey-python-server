@@ -4,6 +4,7 @@ from flask_cors import CORS, cross_origin
 from flask_session import Session
 from config import ApplicationConfig
 from models import db, User, Listing, Booking, Review
+from datetime import datetime
 import os
 
 app = Flask(__name__)
@@ -33,6 +34,15 @@ def get_current_user():
         "id": user.id,
         "email": user.email
     }) 
+
+@app.route("/user/", methods=["GET"])
+def get_user():
+    if request.method == "GET":
+        user = User.query.all()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    user_data = [user.to_dict() for user in user]
+    return jsonify(user_data)
 
 @app.route("/register", methods=["POST"])
 def register_user():
@@ -170,9 +180,13 @@ def create_listing():
 def create_booking():
     if request.method == "POST":
 
-        user_id = request.json["user_id"]
+        user_id = request.json.get("user_id")
+        listing_id = request.json.get("listing_id")
+        check_in_str = request.json.get("check_in")
+        check_out_str = request.json.get("check_out")
+
     
-    if not user_id:
+    if not user_id or not listing_id:
         return jsonify({"error": "Unauthorized"}), 401
     
     # Extract booking details from the request
@@ -183,35 +197,67 @@ def create_booking():
             if check_in < booking.check_out and check_out > booking.check_in:
                 return True
         return False
-    
-    user_id = request.json.user_id  # Get the authenticated user's ID
     data = request.json
-    new_booking = Booking(user_id=user_id, check_in=data['check_in'], check_out=data['check_out'])
+    check_in_str = data['check_in']
+    check_out_str = data['check_out']
+
+    check_in_datetime = datetime.strptime(check_in_str, '%Y-%m-%dT%H:%M:%S.%fZ')
+    check_out_datetime = datetime.strptime(check_out_str, '%Y-%m-%dT%H:%M:%S.%fZ')
+    user_id = request.json["user_id"]  # Get the authenticated user's ID
+
+    new_booking = Booking(user_id=user_id, check_in=check_in_datetime, check_out=check_out_datetime)
     db.session.add(new_booking)
     db.session.commit()
     return jsonify({'message': 'Booking created successfully'}), 201
 
-# # Review (Create)
-# @app.route("/reviews", methods=["POST"])
-# def create_review():
-#     # Get user ID from the session or other authentication mechanism
-#     user_id = request.json("user_id")
-    
-#     if not user_id:
-#         return jsonify({"error": "Unauthorized"}), 401
-    
-#     # Extract review details from the request
-#     booking_id = request.json["booking_id"]
-#     rating = request.json["rating"]
-#     comment = request.json["comment"]
-    
-#     # Create a new review
-#     new_review = Review(user_id=user_id, booking_id=booking_id, rating=rating, comment=comment)
-#     db.session.add(new_review)
-#     db.session.commit()
-    
-#     return jsonify({"message": "Review posted successfully"})
+@app.route("/bookings/<user_id>", methods=["GET"])
+def get_user_bookings(user_id):
+    # Assuming user_id is passed as a URL parameter
+    user_bookings = Booking.query.filter(Booking.user_id == user_id).all()
 
+    if not user_bookings:
+        return jsonify({"message": "No bookings found for this user"}), 404
+
+    # Convert the user's bookings to a list of dictionaries
+    user_bookings_data = [booking.to_dict() for booking in user_bookings]
+
+    return jsonify(user_bookings_data)
+
+
+
+@app.route('/listings/<int:listing_id>/favorite', methods=['POST'])
+def add_favorite(listing_id):
+   user_id = session.get("user_id")
+   if not user_id:
+       return jsonify({"error": "Unauthorized"}), 401
+   
+   user = User.query.filter_by(id=user_id).first()
+   listing = Listing.query.get(listing_id)
+
+   if not listing:
+       return jsonify({"error": "Listing not found"}), 404
+
+   user.favorites.append(listing)
+   db.session.commit()
+
+   return jsonify({"message": "Listing added to favorites successfully"})
+
+@app.route('/listings/<int:listing_id>/favorite', methods=['DELETE'])
+def remove_favorite(listing_id):
+   user_id = session.get("user_id")
+   if not user_id:
+       return jsonify({"error": "Unauthorized"}), 401
+   
+   user = User.query.filter_by(id=user_id).first()
+   listing = Listing.query.get(listing_id)
+
+   if not listing:
+       return jsonify({"error": "Listing not found"}), 404
+
+   user.favorites.remove(listing)
+   db.session.commit()
+
+   return jsonify({"message": "Listing removed from favorites successfully"})
 
 
 if __name__ == "__main__":

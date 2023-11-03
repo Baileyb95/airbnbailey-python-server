@@ -10,7 +10,6 @@ const DisplayRentals = ({ list }) => {
     const [checkInDate, setCheckInDate] = useState(new Date());
     const [checkOutDate, setCheckOutDate] = useState(new Date());
     const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
-    // const user_id = localStorage.id;
 
     const handleBooking = () => {
         setIsBookingModalOpen(true);
@@ -93,26 +92,28 @@ const DisplayRentals = ({ list }) => {
                         
                         </div>
                         <div className="booking-modal-body">
-                            <div className="booking-modal-inputs">
-                                <label htmlFor="check-in">Check In:</label>
-                                <DatePicker
-                                    selected={checkInDate}
-                                    onChange={(date) => setCheckInDate(date)}
-                                    selectsStart
-                                    startDate={checkInDate}
-                                    endDate={checkOutDate}
-                                    dateFormat="MM/dd/yyyy"
-                                />
-                                <label htmlFor="check-out">Check Out:</label>
-                                <DatePicker
-                                    selected={checkOutDate}
-                                    onChange={(date) => setCheckOutDate(date)}
-                                    selectsEnd
-                                    startDate={checkInDate}
-                                    endDate={checkOutDate}
-                                    dateFormat="MM/dd/yyyy"
-                                />
-                            </div>
+                        <div className="booking-modal-inputs">
+  <label htmlFor="check-in">Check In:</label>
+  <DatePicker
+    selected={checkInDate}
+    onChange={(date) => setCheckInDate(date)}
+    selectsStart
+    startDate={checkInDate}
+    endDate={checkOutDate}
+    dateFormat="MM/dd/yyyy"
+    showTimeSelect={false} 
+    />
+  <label htmlFor="check-out">Check Out:</label>
+  <DatePicker
+    selected={checkOutDate}
+    onChange={(date) => setCheckOutDate(date)}
+    selectsEnd
+    startDate={checkInDate}
+    endDate={checkOutDate}
+    dateFormat="MM/dd/yyyy"
+    showTimeSelect={false} 
+  />
+</div>
                             <div className="booking-modal-buttons">
                                 <button onClick={handleConfirmBooking}>Confirm</button>
                                 <button onClick={() => setIsBookingModalOpen(false)}>Cancel</button>

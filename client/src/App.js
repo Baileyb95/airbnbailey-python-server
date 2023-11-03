@@ -12,6 +12,7 @@ import ListingPage from './pages/ListingPage';
 import DisplayRentals from './components/DisplayRentals';
 import PropertyManagementPage from './pages/PropertyManagementPage';
 import Favorites from './pages/Favorites';
+import AccountSettings from './pages/AccountSettings';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/dashboard" element={<DashboardPage/>} />
                 <Route path="/rentals" element={<DisplayRentals/>} />
                 <Route path="/listings-page" element={<ListingPage/>} />
+                <Route path="/account-settings" element={<AccountSettings/>} />
                 {/* <Route path="/bookings" element={<BookingPage/>} /> */}
                 {/* <Route path="/reviews" element={<ReviewPage/>} /> */}
                 <Route path="/manage-listings" element={<PropertyManagementPage/>} /> 

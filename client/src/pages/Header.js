@@ -29,6 +29,9 @@ const Header = () => {
         <Link className="add-button" to="/bookings">
             Bookings
         </Link>
+        <Link className="add-button" to="/account-settings">
+            Account Settings
+        </Link>
     </div>
     {/* <div className="center">
         <h1>
