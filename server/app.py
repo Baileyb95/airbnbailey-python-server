@@ -166,119 +166,52 @@ def create_listing():
 
 # Booking (Create and Check Overlap)
 @app.route("/bookings", methods=["POST"])
+
 def create_booking():
-    # Get user ID from the session or other authentication mechanism
-    user_id = request.json("user_id")
+    if request.method == "POST":
+
+        user_id = request.json["user_id"]
     
     if not user_id:
         return jsonify({"error": "Unauthorized"}), 401
     
     # Extract booking details from the request
     def check_overlap(listing_id, check_in, check_out):
-        """
-        Check for date overlaps with existing bookings for the property
-        """
+
         bookings = Booking.query.filter_by(listing_id=listing_id).all()
         for booking in bookings:
             if check_in < booking.check_out and check_out > booking.check_in:
                 return True
         return False
-
-    user_id = request.json("user_id")
-
-    if not user_id:
-        return jsonify({"error": "Unauthorized"}), 401
-
-    listing_id = request.json["listing_id"]
-    check_in = request.json["check_in"]
-    check_out = request.json["check_out"]
-
-    # Check for date overlaps with existing bookings for the property
-    if check_overlap(listing_id, check_in, check_out):
-        return jsonify({"error": "Booking date overlap"}), 400
-
-    # Create a new booking
-    new_booking = Booking(user_id=user_id, listing_id=listing_id, check_in=check_in, check_out=check_out)
+    
+    user_id = request.json.user_id  # Get the authenticated user's ID
+    data = request.json
+    new_booking = Booking(user_id=user_id, check_in=data['check_in'], check_out=data['check_out'])
     db.session.add(new_booking)
     db.session.commit()
-    
-    return jsonify({"message": "Booking created successfully"})
+    return jsonify({'message': 'Booking created successfully'}), 201
 
-# Review (Create)
-@app.route("/reviews", methods=["POST"])
-def create_review():
-    # Get user ID from the session or other authentication mechanism
-    user_id = request.json("user_id")
-    
-    if not user_id:
-        return jsonify({"error": "Unauthorized"}), 401
-    
-    # Extract review details from the request
-    booking_id = request.json["booking_id"]
-    rating = request.json["rating"]
-    comment = request.json["comment"]
-    
-    # Create a new review
-    new_review = Review(user_id=user_id, booking_id=booking_id, rating=rating, comment=comment)
-    db.session.add(new_review)
-    db.session.commit()
-    
-    return jsonify({"message": "Review posted successfully"})
-
-# # Property Listing Management (Patch)
-# @app.route("/listings/<listing_id>", methods=["PATCH"])
-# def update_listing(listing_id):
+# # Review (Create)
+# @app.route("/reviews", methods=["POST"])
+# def create_review():
 #     # Get user ID from the session or other authentication mechanism
 #     user_id = request.json("user_id")
     
 #     if not user_id:
 #         return jsonify({"error": "Unauthorized"}), 401
     
-#     # Find the listing by ID
-#     listing = Listing.query.get(listing_id)
+#     # Extract review details from the request
+#     booking_id = request.json["booking_id"]
+#     rating = request.json["rating"]
+#     comment = request.json["comment"]
     
-#     if not listing:
-#         return jsonify({"error": "Listing not found"}), 404
-    
-#     # Check if the user is the owner of the listing
-#     if user_id != listing.user_id:
-#         return jsonify({"error": "Unauthorized to update this listing"}), 403
-    
-#     # Update the listing details
-#     if "title" in request.json:
-#         listing.title = request.json["title"]
-#     if "description" in request.json:
-#         listing.description = request.json["description"]
-    
+#     # Create a new review
+#     new_review = Review(user_id=user_id, booking_id=booking_id, rating=rating, comment=comment)
+#     db.session.add(new_review)
 #     db.session.commit()
     
-#     return jsonify({"message": "Listing updated successfully"})
+#     return jsonify({"message": "Review posted successfully"})
 
-# # Property Listing Management (Delete)
-# @app.route("/listings/<listing_id>", methods=["DELETE"])
-# def delete_listing(listing_id):
-#     # Get user ID from the session or other authentication mechanism
-#     user_id = request.json("user_id")
-    
-#     if not user_id:
-#         return jsonify({"error": "Unauthorized"}), 401
-    
-#     # Find the listing by ID
-#     listing = Listing.query.get(listing_id)
-    
-#     if not listing:
-#         return jsonify({"error": "Listing not found"}), 404
-    
-#     # Check if the user is the owner of the listing
-#     if user_id != listing.user_id:
-        
-#         return jsonify({"error": "Unauthorized to delete this listing"}), 403
-    
-#     # Delete the listing
-#     db.session.delete(listing)
-#     db.session.commit()
-    
-#     return jsonify({"message": "Listing deleted successfully"})
 
 
 if __name__ == "__main__":

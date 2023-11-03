@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Header from './Header';
 
 const PropertyManagementPage = () => {
     const [formData, setFormData] = useState({
@@ -31,6 +32,7 @@ const PropertyManagementPage = () => {
         };
     return (
         <div>
+            <Header />
             <h2>Property Management</h2>
             <form onSubmit={handleSubmit}>
                 <div>

@@ -22,7 +22,15 @@ class Booking(db.Model):
     user_id = db.Column(db.String(32), db.ForeignKey("users.id"), nullable=False)
     check_in = db.Column(db.DateTime, nullable=False)
     check_out = db.Column(db.DateTime, nullable=False)
+    # listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'), nullable=False)
 
+    def to_dict(self):
+        return {
+            'user_id': self.user_id,
+            'listing_id': self.listing_id,
+            'check_in': self.check_in,
+            'check_out': self.check_out
+        }
 class Review(db.Model):
     __tablename__ = "reviews"
     id = db.Column(db.String(32), primary_key=True, unique=True, default=get_uuid)
@@ -43,6 +51,9 @@ class Listing(db.Model):
     state = db.Column(db.String(50), nullable=False)
     zip_code = db.Column(db.String(10), nullable=False)
     price = db.Column(db.Integer, nullable=False)
+
+    # user=db.relationship("User", backref="listings")
+    # bookings = db.relationship("Booking", backref="listings")
 
     def to_dict(self):
         return {

@@ -1,6 +1,6 @@
 import React from "react";
-import { Route, Link } from "react-router-dom";
 import ListingPage from "./ListingPage";
+import Header from "./Header";
 
 
 function Favorites({ favorites, handleAddToFavorites, handleDeleteFromFavorites }) {
@@ -22,10 +22,11 @@ function Favorites({ favorites, handleAddToFavorites, handleDeleteFromFavorites 
         })
     
         return (
+            <><div><Header /></div>
             <div className="favorites">
                 <div>Favorites</div>
                 {displayFavorites}
-            </div>
+            </div></>
         );
     
 

@@ -1,38 +1,128 @@
-.App {
+* {
+  margin: 100;
+  padding: 100;
+  box-sizing: border-box;
+}
+
+.postcard{
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.heading{
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.all-button,
+.add-button,
+.fav-button,
+.profile-button,
+.login-button,
+.signup-button,
+.main-button:visited{
+  color:black;
+  padding-left: 15px;
+  text-decoration: none;
+}
+.main-button{
+  text-decoration: none
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.main-button:hover{
+  color: blue;
+}
+.all-button:hover{
+  color: blue;
+}
+.add-button:hover{
+  color: blue;
+}
+.fav-button:hover{
+  color: blue;
+}
+.listing-button:hover{
+  color: blue;
+}
+.login-button:hover{
+  color: blue;
+}
+.signup-button:hover{
+  color: blue;
+}
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left, .right {
+  flex: .6;
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+}
+
+.center {
+  flex: .4;
+  text-align: center;
+}
+
+.left a,
+.right a {
+  margin: 0 3px;
+}
+.logo{
+  width: 170px;
+  height: 100px;
+}
+.property-card {
+  display: flex;
+  border: 1px solid #ccc;
+  margin: 10px;
+  padding: 10px;
+}
+
+.image-container {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.property-details {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-left: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+.price {
+  font-size: 24px;
+  font-weight: bold;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.beds-baths {
+  margin-top: 5px;
+}
+
+.beds, .baths {
+  margin-right: 10px;
+}
+
+.square-feet {
+  margin-top: 5px;
+}
+
+.description {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+}
+.deleteBtn{
+  width:150px;
 }

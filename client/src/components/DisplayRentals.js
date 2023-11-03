@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import Header from '../pages/Header';
 
 const DisplayRentals = ({ list }) => {
 
@@ -10,6 +10,7 @@ const DisplayRentals = ({ list }) => {
     const [checkInDate, setCheckInDate] = useState(new Date());
     const [checkOutDate, setCheckOutDate] = useState(new Date());
     const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+    // const user_id = localStorage.id;
 
     const handleBooking = () => {
         setIsBookingModalOpen(true);
@@ -22,12 +23,13 @@ const DisplayRentals = ({ list }) => {
                 check_out: checkOutDate,
             };
             if (checkInDate && checkOutDate) {
+                const addUserToFormData = {...bookingData, user_id: localStorage.id}
                 fetch('http://127.0.0.1:5000/bookings', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(bookingData),
+                    body: JSON.stringify(addUserToFormData),
                 })  
                 .then((response) => response.json())
                 .then((data) => {
@@ -70,6 +72,7 @@ const DisplayRentals = ({ list }) => {
     };
   return (
     <div>
+        <Header />
       <h1>All Rentals</h1>
       {rental.map((rental) => (
         <div key={rental.id} className="rental-listing">
