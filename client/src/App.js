@@ -7,7 +7,7 @@ import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashBoard';
 import ListingPage from './pages/ListingPage';
-// import BookingPage from './pages/BookingPage';
+import BookingPage from './pages/BookingPage';
 // import ReviewPage from './pages/ReviewPage';
 import DisplayRentals from './components/DisplayRentals';
 import PropertyManagementPage from './pages/PropertyManagementPage';
@@ -32,7 +32,7 @@ function App() {
                 <Route path="/rentals" element={<DisplayRentals/>} />
                 <Route path="/listings-page" element={<ListingPage/>} />
                 <Route path="/account-settings" element={<AccountSettings/>} />
-                {/* <Route path="/bookings" element={<BookingPage/>} /> */}
+                <Route path="/bookings" element={<BookingPage/>} />
                 {/* <Route path="/reviews" element={<ReviewPage/>} /> */}
                 <Route path="/manage-listings" element={<PropertyManagementPage/>} /> 
         </Routes>

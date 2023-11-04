@@ -14,9 +14,8 @@ const AccountSettings = () => {
 
     useEffect(() => {
         // Fetch user data based on their user ID (assuming you have the user's ID in localStorage)
-        const userId = localStorage.id; // You need to set this value in your code
 
-        fetch(`http://127.0.0.1:5000/user/`)
+        fetch(`http://127.0.0.1:5000/user/${localStorage.getItem('id')}`)
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
@@ -77,7 +76,6 @@ const AccountSettings = () => {
                 <h2>Last Name: {user.last_name}</h2>
                 <h3>Email: {user.email}</h3>
                 <h3>Phone Number: {user.phone_number}</h3>
-                <h3>Password: {user.password}</h3>
                 <button onClick={handleUpdateUser}>Update User Information</button>
                 <button onClick={handleDeleteUser}>
                     {confirmation ? "Confirm Deletion" : "Delete Account"}
