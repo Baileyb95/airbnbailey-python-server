@@ -22,7 +22,7 @@ class User(db.Model):
 
     listings = db.relationship("Listing", backref="user")
     bookings = db.relationship("Booking", backref="user")
-    favorites = db.relationship("Listing", secondary=favorites_association, backref="users_who_favorited")
+    favorites = db.relationship("Listing", secondary=favorites_association, back_populates="favorited_by")
 
 
     def to_dict(self):
@@ -88,7 +88,7 @@ class Listing(db.Model):
     price = db.Column(db.Integer, nullable=False)
 
     bookings = db.relationship("Booking", back_populates="listing")
-    favorited_by = db.relationship("User", secondary=favorites_association, backref="listings_favorited")
+    favorited_by = db.relationship("User", secondary=favorites_association, back_populates="favorites")
 
     def to_dict(self):
         return {

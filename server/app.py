@@ -290,39 +290,52 @@ def get_user_bookings(user_id):
 
 ######################################################################favorites
 
-# @app.route('/listings/<int:listing_id>/favorite', methods=['POST'])
-# def add_favorite(listing_id):
-#    user_id = session.get("user_id")
-#    if not user_id:
-#        return jsonify({"error": "Unauthorized"}), 401
-   
-#    user = User.query.filter_by(id=user_id).first()
-#    listing = Listing.query.get(listing_id)
+@app.route('/favorites', methods=['POST'])
+def add_favorite():
+    # Get the user and listing data from the request
+    user_id = request.json.get('user_id')
+    listing_id = request.json.get('listing_id')
 
-#    if not listing:
-#        return jsonify({"error": "Listing not found"}), 404
+    # Check if the user and listing exist in the database
+    user = User.query.get(user_id)
+    listing = Listing.query.get(listing_id)
 
-#    user.favorites.append(listing)
-#    db.session.commit()
+    if not user or not listing:
+        return jsonify({'error': 'User or listing not found'}), 404
 
-#    return jsonify({"message": "Listing added to favorites successfully"})
+    # Add the listing to the user's favorites
+    user.favorites.append(listing)
+    db.session.commit()
 
-# @app.route('/listings/<int:listing_id>/favorite', methods=['DELETE'])
-# def remove_favorite(listing_id):
-#    user_id = session.get("user_id")
-#    if not user_id:
-#        return jsonify({"error": "Unauthorized"}), 401
-   
-#    user = User.query.filter_by(id=user_id).first()
-#    listing = Listing.query.get(listing_id)
+    return jsonify({'message': 'Listing added to favorites'}), 201
 
-#    if not listing:
-#        return jsonify({"error": "Listing not found"}), 404
+@app.route('/favorites/<string:user_id>', methods=['GET'])
+def get_favorites(user_id):
+    # Assuming user_id is passed as a URL parameter
+    user = User.query.get(user_id)
 
-#    user.favorites.remove(listing)
-#    db.session.commit()
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
 
-#    return jsonify({"message": "Listing removed from favorites successfully"})
+    # Convert the user's favorites to a list of dictionaries
+    favorites_data = [listing.to_dict() for listing in user.favorites]
+
+    return jsonify(favorites_data)
+
+@app.route('/favorites/<string:user_id>/<int:listing_id>', methods=['DELETE'])
+def remove_favorite(user_id, listing_id):
+    # Assuming user_id and listing_id are passed as URL parameters
+    user = User.query.get(user_id)
+    listing = Listing.query.get(listing_id)
+
+    if not user or not listing:
+        return jsonify({'error': 'User or listing not found'}), 404
+
+    # Remove the listing from the user's favorites
+    user.favorites.remove(listing)
+    db.session.commit()
+
+    return jsonify({'message': 'Listing removed from favorites'})
 
 
 if __name__ == "__main__":
