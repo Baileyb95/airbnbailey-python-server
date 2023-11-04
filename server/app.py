@@ -68,6 +68,8 @@ def update_user(user_id):
 def delete_user(user_id):
     user = User.query.get(user_id)
     if user:
+        Listing.query.filter_by(user_id=user_id).delete()
+        Booking.query.filter_by(user_id=user_id).delete()
         db.session.delete(user)
         db.session.commit()
         return jsonify({'message': 'User deleted successfully'})
@@ -91,15 +93,17 @@ def get_users_booking(user_id):
    user_bookings = [booking.to_dict() for booking in user.bookings]
    return jsonify(user_bookings)
 
-@app.route("/user/<string:user_id>/bookings/<string:listing_id>", methods=["DELETE"])
+@app.route("/user/<string:user_id>/bookings/<int:listing_id>", methods=["DELETE"])
 def delete_booking(listing_id, user_id):
   try:
       user_id = request.json["user_id"]
-      listing_id = request.json["listing_id"]
+      listing_id = request.json.get("listing_id")
   except KeyError:
       return jsonify({'message': 'Missing user_id or listing_id in request body'}), 400
   booking = Booking.query.filter_by(listing_id=listing_id, user_id=user_id).first()
   if booking:
+      Listing.query.filter_by(id=listing_id).delete()
+      Booking.query.filter_by(id=booking.id).delete()
       db.session.delete(booking)
       db.session.commit()
       return jsonify({'message': 'Booking deleted successfully'})
@@ -195,6 +199,7 @@ def update_listing(listing_id):
 def delete(listing_id):
     listing = Listing.query.get(listing_id)
     if listing:
+        Booking.query.filter_by(listing_id=listing_id).delete()
         db.session.delete(listing)
         db.session.commit()
         return jsonify({'message': 'Property deleted successfully'})
