@@ -290,7 +290,6 @@ def get_user_bookings(user_id):
 
 ######################################################################favorites
 
-@app.route('/favorites', methods=['POST'])
 def add_favorite():
     # Get the user and listing data from the request
     user_id = request.json.get('user_id')
@@ -303,11 +302,16 @@ def add_favorite():
     if not user or not listing:
         return jsonify({'error': 'User or listing not found'}), 404
 
+    # Check if the user has already favorited the listing
+    if listing in user.favorites:
+        return jsonify({'message': 'Listing is already in favorites'}), 200
+
     # Add the listing to the user's favorites
     user.favorites.append(listing)
     db.session.commit()
 
     return jsonify({'message': 'Listing added to favorites'}), 201
+
 
 @app.route('/favorites/<string:user_id>', methods=['GET'])
 def get_favorites(user_id):

@@ -86,8 +86,8 @@ const AccountSettings = () => {
                     // Handle the error, e.g., display an error message to the user
                 })
                 .finally(() => {
-              navigate('/'); // 
-              window.location.reload(); 
+            //   navigate('/'); // 
+            //   window.location.reload(); 
               setConfirmation(false); 
             });
         } else {
