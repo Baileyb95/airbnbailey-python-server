@@ -44,11 +44,11 @@ const DashboardPage = () => {
                         <button>View Favorites</button>
                     </Link>
                 </div>
-                {/* <div>
-                    <Link to="/settings">
+                <div>
+                    <Link to="/account-settings">
                         <button>Account Settings</button>
                     </Link>
-                </div> */}
+                </div>
                 <div>
                     <button onClick={handleLogout}>Logout</button>
                 </div>

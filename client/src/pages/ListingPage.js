@@ -59,7 +59,31 @@ const Listings = () => {
   };
 
   const handleUpdateListing = () => {
-    const addUserToFormData = { ...updateFormData, user_id: localStorage.id };
+    const updatedData = {};
+  
+    for (const key in updateFormData) {
+      if (updateFormData[key] !== '') {
+        updatedData[key] = updateFormData[key];
+      }
+    }
+  
+    if (Object.keys(updatedData).length === 0) {
+      // No fields to update, so don't send the request
+      setSelectedListing(null);
+      setUpdateFormData({
+        title: '',
+        description: '',
+        city: '',
+        state: '',
+        zip_code: '',
+        price: '',
+        image_url: '',
+      });
+      return;
+    }
+  
+    const addUserToFormData = { ...updatedData, user_id: localStorage.id };
+  
     fetch(`http://127.0.0.1:5000/listings/${selectedListing.id}`, {
       method: 'PATCH',
       headers: {
@@ -86,7 +110,7 @@ const Listings = () => {
         console.error('Error updating property listing:', error);
       });
   };
-
+  
   return (
     <div>
       <Header />

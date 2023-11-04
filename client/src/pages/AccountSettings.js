@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Header from '../pages/Header';
+import { useNavigate } from 'react-router-dom';
 
 const AccountSettings = () => {
     const [user, setUser] = useState({});
+    const navigate = useNavigate();
     const [updateUserFormData, setUpdateUserFormData] = useState({
         first_name: '',
         last_name: '',
@@ -35,11 +37,38 @@ const AccountSettings = () => {
     }
 
     const handleUpdateUser = () => {
-        // Perform the update operation based on the fields that the user wants to update
-        // You need to implement this based on your server and API design
-        console.log("User information updated:", updateUserFormData);
-    }
-
+        const updatedData = {};
+    
+        for (const key in updateUserFormData) {
+            if (updateUserFormData[key] !== '') {
+                updatedData[key] = updateUserFormData[key];
+            }
+        }
+    
+        if (Object.keys(updatedData).length === 0) {
+            // No fields to update, so don't send the request
+            return;
+        }
+    
+        fetch(`http://127.0.0.1:5000/user/${localStorage.getItem('id')}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            window.location.reload();
+            // Handle the response if needed
+        })
+        .catch((error) => {
+            console.error('Error updating user information:', error);
+            // Handle the error, e.g., display an error message to the user
+        });
+    };
+    
     const handleDeleteUser = () => {
         if (confirmation) {
             fetch(`http://127.0.0.1:5000/user/${localStorage.id}`, {
@@ -57,8 +86,8 @@ const AccountSettings = () => {
                     // Handle the error, e.g., display an error message to the user
                 })
                 .finally(() => {
-              // navigate('/'); // 
-              // window.location.reload(); 
+              navigate('/'); // 
+              window.location.reload(); 
               setConfirmation(false); 
             });
         } else {

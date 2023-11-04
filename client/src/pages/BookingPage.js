@@ -18,17 +18,21 @@ const Bookings = () => {
                 console.error('Error fetching property bookings:', error);
             });
     }, []);
-
-    console.log(bookings);
-    const handleDeleteListing = (id) => {
-        fetch(`http://127.0.0.1:5000/booking/${id}`, {
+    const handleDeleteListing = (listingId) => {
+        fetch(`http://127.0.0.1:5000/user/${localStorage.getItem('id')}/bookings/${listingId}`, {
             method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_id: localStorage.getItem('id'),
+                listing_id: listingId,
+            }),
         })
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
-                // setbookings(data);
-
+                // setBookings(bookings.filter((booking) => booking.id !== listingId));
             })
             .catch((error) => {
                 console.error('Error deleting property listing:', error);
@@ -36,10 +40,8 @@ const Bookings = () => {
             .finally(() => {
                 // navigate('/rentals');
                 // window.location.reload();
-            })
-            ;
-    };
-
+            });
+      };
     return (
         <div>
             <Header />
