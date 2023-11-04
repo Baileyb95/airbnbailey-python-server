@@ -290,6 +290,7 @@ def get_user_bookings(user_id):
 
 ######################################################################favorites
 
+@app.route('/favorites', methods=['POST'])
 def add_favorite():
     # Get the user and listing data from the request
     user_id = request.json.get('user_id')
