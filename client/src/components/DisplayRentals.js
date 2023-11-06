@@ -10,6 +10,7 @@ const DisplayRentals = ({ list }) => {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [booking, setBooking] = useState([]);
 
+
   const handleBooking = (booking) => {
     setBooking(booking);
     setIsBookingModalOpen(true);
@@ -73,6 +74,7 @@ const DisplayRentals = ({ list }) => {
         console.log(data);
       });
    };
+
 
   return (
     <div>
