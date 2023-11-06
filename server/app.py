@@ -85,31 +85,6 @@ def get_users_listings(user_id):
    user_listings = [listing.to_dict() for listing in user.listings]
    return jsonify(user_listings)
 
-@app.route("/user/<string:user_id>/bookings", methods=["GET"])
-def get_users_booking(user_id):
-   user = User.query.get(user_id)
-   if not user:
-       return jsonify({"error": "User not found"}), 404
-   user_bookings = [booking.to_dict() for booking in user.bookings]
-   return jsonify(user_bookings)
-
-@app.route("/user/<string:user_id>/bookings/<int:listing_id>", methods=["DELETE"])
-def delete_booking(listing_id, user_id):
-  try:
-      user_id = request.json["user_id"]
-      listing_id = request.json.get("listing_id")
-  except KeyError:
-      return jsonify({'message': 'Missing user_id or listing_id in request body'}), 400
-  booking = Booking.query.filter_by(listing_id=listing_id, user_id=user_id).first()
-  if booking:
-      Listing.query.filter_by(id=listing_id).delete()
-      Booking.query.filter_by(id=booking.id).delete()
-      db.session.delete(booking)
-      db.session.commit()
-      return jsonify({'message': 'Booking deleted successfully'})
-  else:
-      return jsonify({'message': 'Booking not found'}, 404)
-
 
 @app.route("/register", methods=["POST"])
 def register_user():
@@ -169,6 +144,14 @@ def listings():
         listings = Listing.query.all()
         listings_data = [listing.to_dict() for listing in listings]
         return jsonify(listings_data)
+    
+@app.route('/listings/<int:listing_id>', methods=['GET'])
+def get_listing_by_id(listing_id):
+   listing = Listing.query.get(listing_id)
+   if not listing:
+       return jsonify({"error": "Listing not found"}), 404
+   listing_data = listing.to_dict()
+   return jsonify(listing_data)
     
 @app.route('/listings/<int:listing_id>', methods=['PATCH'])
 def update_listing(listing_id):
@@ -291,6 +274,35 @@ def get_user_bookings(user_id):
 
     return jsonify(user_bookings_data)
 
+
+@app.route("/user/<string:user_id>/bookings", methods=["GET"])
+def get_users_booking(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    
+    user_bookings = [booking.to_dict() for booking in user.bookings]
+    
+    return jsonify(user_bookings)
+
+@app.route("/user/<string:user_id>/bookings/<string:id>", methods=["DELETE"])
+def delete_booking(user_id, id):
+   try:
+       
+       booking = Booking.query.filter_by(id=id).first()
+       print(id, "BOOKING")
+       print("booking", booking)
+       if booking:
+           # Delete the booking
+
+           db.session.delete(booking)
+           db.session.commit()
+
+           return jsonify({'message': 'Booking and associated listing deleted successfully'})
+       else:
+           return jsonify({'message': 'Booking not found'}, 404)
+   except Exception as e:
+       return jsonify({'message': 'An error occurred while deleting the booking'}, 500)
 
 
 ######################################################################favorites

@@ -49,6 +49,7 @@ class Booking(db.Model):
     def to_dict(self):
         return {
             'user_id': self.user_id,
+            'id': self.id,
             'listing_id': self.listing_id,
             'check_in': self.check_in,
             'check_out': self.check_out,
@@ -71,8 +72,6 @@ class Review(db.Model):
             'rating': self.rating,
             'comment': self.comment
         }
-
-    
 
 class Listing(db.Model):
     __tablename__ = "listings"
