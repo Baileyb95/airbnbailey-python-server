@@ -13,6 +13,7 @@ import DisplayRentals from './components/DisplayRentals';
 import PropertyManagementPage from './pages/PropertyManagementPage';
 import Favorites from './pages/Favorites';
 import AccountSettings from './pages/AccountSettings';
+import TheRentalProperty from './components/TheRentalProperty';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
     return (
         <Routes>
                 <Route path="/favorites" element={<Favorites favorites={favorites} handleAddToFavorites={handleAddToFavorites}/>} />
+                <Route path="/rentals/:id" element={<TheRentalProperty/>} />
                 <Route path="/" element ={<HomePage/>} />
                 <Route path="/register" element={<RegisterPage/>} />
                 <Route path="/login" element={<LoginPage/>} />
