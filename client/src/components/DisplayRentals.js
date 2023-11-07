@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 
 const DisplayRentals = ({ list }) => {
   const [rental, setRental] = useState([]);
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
 
   useEffect(() => {
     fetch('http://127.0.0.1:5000/listings')
@@ -33,6 +35,14 @@ const DisplayRentals = ({ list }) => {
     })
       .then((response) => response.json())
       .then((data) => {
+        setNotificationMessage('Rental was added to your favorites');
+        setIsNotificationVisible(true);
+
+        // Auto-hide the notification after 4 seconds
+        setTimeout(() => {
+          setIsNotificationVisible(false);
+        }, 3000);
+
         console.log(data);
       });
   };
@@ -70,6 +80,12 @@ const DisplayRentals = ({ list }) => {
           </div>
         ))}
       </div>
+      
+      {isNotificationVisible && (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 m-4 p-4 bg-green-500 text-white rounded shadow text-center">
+          {notificationMessage}
+        </div>
+      )}
     </div>
   );
 };

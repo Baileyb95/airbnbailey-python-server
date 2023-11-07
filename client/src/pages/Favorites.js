@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
+import { Link } from "react-router-dom";
 
 const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
@@ -35,16 +36,22 @@ const Favorites = () => {
   return (
     <div>
       <Header />
-      <div className="p-4">
+      <div className="p-4 md:w-2/5 lg:w-1/3">
         <h1 className="text-2xl font-bold mb-4">Favorites</h1>
         {favorites.map((favorite) => (
           <div key={favorite.id} className="bg-white rounded-lg shadow-md p-4 mb-4">
-            <h2 className="text-xl font-semibold mb-2">{favorite.title}</h2>
-            {favorite.image_url && (
-              <div>
-                <img src={favorite.image_url} alt="Listing" className="mb-2 rounded" />
-              </div>
-            )}
+            <Link to={`/rentals/${favorite.id}`}>
+              <h2 className="text-xl font-semibold mb-2">{favorite.title}</h2>
+              {favorite.image_url && (
+                <div>
+                  <img
+                    src={favorite.image_url}
+                    alt="Listing"
+                    className="mb-2 rounded-lg w-160 h-100 object-cover" // Adjust the width and height here
+                  />
+                </div>
+              )}
+            </Link>
             <p className="text-gray-600">Description: {favorite.description}</p>
             <p className="text-gray-600">Address: {favorite.address}</p>
             <p className="text-gray-600">City: {favorite.city}</p>
