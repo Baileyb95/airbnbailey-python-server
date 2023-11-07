@@ -6,15 +6,15 @@ import { useParams } from "react-router-dom";
 
 const TheRentalProperty = () => {
   const { id } = useParams();
-  const [rentalListing, setRentalListing] = useState([]);
-
+  const [rentalListing, setRentalListing] = useState(null);
   const [checkInDate, setCheckInDate] = useState(new Date());
   const [checkOutDate, setCheckOutDate] = useState(new Date());
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
-  const [booking, setBooking] = useState(null); // Changed to null
+  const [booking, setBooking] = useState(null);
+  const [favoriteNotification, setFavoriteNotification] = useState("");
 
-  const handleBooking = (listingId) => { // Changed parameter name to listingId
-    setBooking(listingId); // Updated to set the listing ID
+  const handleBooking = (listingId) => {
+    setBooking(listingId);
     setIsBookingModalOpen(true);
   };
 
@@ -28,10 +28,10 @@ const TheRentalProperty = () => {
 
       const addUserToFormData = { ...bookingData, user_id: localStorage.id };
 
-      fetch('http://127.0.0.1:5000/bookings', {
-        method: 'POST',
+      fetch("http://127.0.0.1:5000/bookings", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(addUserToFormData),
       })
@@ -41,7 +41,7 @@ const TheRentalProperty = () => {
           setIsBookingModalOpen(false);
         });
     } else {
-      alert('Please select a check-in and check-out date.');
+      alert("Please select a check-in and check-out date.");
     }
   };
 
@@ -49,50 +49,77 @@ const TheRentalProperty = () => {
     fetch(`http://127.0.0.1:5000/listings/${id}`)
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw Error("Network response was not ok");
         }
         return response.json();
       })
       .then((data) => {
         console.log(data);
-        setRentalListing([data]);
+        setRentalListing(data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
   }, [id]);
-    
 
   const handleFavorite = (listingId) => {
     const favoriteData = {
       user_id: localStorage.id,
-      listing_id: listingId, // Changed to listingId
+      listing_id: listingId,
     };
 
-    fetch('http://127.0.0.1:5000/favorites', {
-      method: 'POST',
+    fetch("http://127.0.0.1:5000/favorites", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(favoriteData),
     })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        setFavoriteNotification("Added to favorites");
+        setTimeout(() => {
+          setFavoriteNotification("");
+        }, 3000);
       });
   };
 
   return (
     <div>
       <Header />
-      <h1>All Rentals</h1>
-      <></>
-        {rentalListing.map((rentalListings) => (
-            <div key={String(rentalListings.id)} className="rental-listing">
-                <h2>{rentalListings.title}</h2>
-                <a>Image: <img src={rentalListings.image_url} alt="Listing" /></a>
-          <button onClick={() => handleFavorite(rentalListings.id)}>Add to Favorites</button>
-          <button onClick={() => handleBooking(rentalListings.id)}>Book Now</button>
+      <div className="flex space-x-4 p-4">
+        <div className="w-1/2 shadow-lg p-4">
+          {rentalListing && (
+            <div key={String(rentalListing.id)} className="rental-listing">
+              <h2 className="text-xl font-bold mb-2">{rentalListing.title}</h2>
+              <img src={rentalListing.image_url} alt="Listing" className="mb-2 rounded" />
+              <p className="text-gray-600">Description: {rentalListing.description}</p>
+              <p className="text-gray-600">Address: {rentalListing.address}</p>
+              <p className="text-gray-600">City: {rentalListing.city}</p>
+              <p className="text-gray-600">State: {rentalListing.state}</p>
+              <p className="text-gray-600">Zip Code: {rentalListing.zip_code}</p>
+              <p className="text-gray-600">Price: {rentalListing.price}</p>
+              <p className="text-gray-600">Country: {rentalListing.country}</p>
+              <button
+                onClick={() => handleFavorite(rentalListing.id)}
+                className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600"
+              >
+                Add to Favorites
+              </button>
+              {favoriteNotification && (
+                <p className="text-green-500 mt-2">{favoriteNotification}</p>
+              )}
+            </div>
+          )}
+        </div>
+        <div className="w-1/2 shadow-lg p-4">
+          <button
+            onClick={() => handleBooking(rentalListing.id)}
+            className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600"
+          >
+            Book Now
+          </button>
           {isBookingModalOpen && (
             <div className="booking-modal">
               <div className="booking-modal-content">
@@ -123,16 +150,27 @@ const TheRentalProperty = () => {
                     />
                   </div>
                   <div className="booking-modal-buttons">
-                    <button onClick={handleConfirmBooking}>Confirm</button>
-                    <button onClick={() => setIsBookingModalOpen(false)}>Cancel</button>
+                    <button
+                      onClick={handleConfirmBooking}
+                      className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600"
+                    >
+                      Confirm
+                    </button>
+                    <button
+                      onClick={() => setIsBookingModalOpen(false)}
+                      className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600"
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           )}
         </div>
-        ))}
+      </div>
     </div>
-    );
-}
+  );
+};
+
 export default TheRentalProperty;

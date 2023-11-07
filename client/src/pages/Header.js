@@ -1,56 +1,55 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-
 const Header = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleLogout = () => {
-        fetch('http://127.0.0.1:5000/logout', {
-            method: 'DELETE'
-        })
-        .then(() => {
-            navigate('/');
-        })
-        .catch((error) => {
-            console.error('Error logging out:', error);
-        });
-    };
+  const handleLogout = () => {
+    fetch('http://127.0.0.1:5000/logout', {
+      method: 'DELETE'
+    })
+      .then(() => {
+        navigate('/');
+      })
+      .catch((error) => {
+        console.error('Error logging out:', error);
+      });
+  };
 
-    return (
-        <div className="container">
-    <div className="left">
-        <Link className="main-button" to="/dashboard">
+  return (
+    <div className="bg-white shadow-lg p-4">
+      <div className="container mx-auto flex justify-between items-center">
+        <div className="space-x-4">
+          <Link to="/dashboard" className="main-button hover:text-blue-500">
             Home
-        </Link>
-        <Link className="all-button" to="/rentals">
+          </Link>
+          <Link to="/rentals" className="all-button hover:text-blue-500">
             View Rentals
-        </Link>
-        <Link className="add-button" to="/bookings">
+          </Link>
+          <Link to="/bookings" className="add-button hover:text-blue-500">
             Bookings
-        </Link>
-        <Link className="add-button" to="/account-settings">
-            Account Settings
-        </Link>
-    </div>
-    {/* <div className="center">
-        <h1>
-            <img src="https://i.gyazo.com/a7d613272ba5d70a3f39574a0c9fff67.png" alt="Pillow Logo" className="logo" />
-        </h1>
-    </div> */}
-    <div className="right">
-        <Link className="fav-button" to="/favorites">
+          </Link>
+          <Link to="/favorites" className="fav-button hover:text-blue-500">
             Favorites
-        </Link>
-        <Link className="listing-button" to="/manage-listings">
-            Manage Listing
-        </Link>
-        <div>
-                    <button onClick={handleLogout}>Logout</button>
+          </Link>
         </div>
+        <div className="space-x-4">
+          <Link to="/manage-listings" className="listing-button hover:text-blue-500">
+            Manage Listings
+          </Link>
+          <Link to="/account-settings" className="add-button hover:text-blue-500">
+            Account Settings
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
     </div>
-</div>
-    );
+  );
 };
 
 export default Header;

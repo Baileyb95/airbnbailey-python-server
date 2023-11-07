@@ -2,61 +2,61 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const DashboardPage = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleLogout = () => {
-        fetch('http://127.0.0.1:5000/logout', {
-            method: 'DELETE'
-        })
-        .then(() => {
-            navigate('/');
-        })
-        .catch((error) => {
-            console.error('Error logging out:', error);
-        });
-    };
+  const handleLogout = () => {
+    fetch('http://127.0.0.1:5000/logout', {
+      method: 'DELETE'
+    })
+      .then(() => {
+        navigate('/');
+      })
+      .catch((error) => {
+        console.error('Error logging out:', error);
+      });
+  };
 
-        return (
-            <div>
-                <h2>Dashboard</h2>
-                <div>
-                    <Link to="/rentals">
-                        <button>View Rentals</button>
-                    </Link>
-                </div>
-                <div>
-                    <Link to="/bookings">
-                        <button>View Bookings</button>
-                    </Link>
-                </div>
-                <div>
-                    <Link to="/reviews">
-                        <button>View Reviews</button>
-                    </Link>
-                </div>
-                <div>
-                    <Link to="/manage-listings">
-                        <button>Manage Listings</button>
-                    </Link>
-                </div>
-                <div>
-                    <Link to="/favorites">
-                        <button>View Favorites</button>
-                    </Link>
-                </div>
-                <div>
-                    <Link to="/account-settings">
-                        <button>Account Settings</button>
-                    </Link>
-                </div>
-                <div>
-                    <button onClick={handleLogout}>Logout</button>
-                </div>
-                <div>
-                  {/* <ListingPage list={listings} />  */}
-                </div>
-            </div>
-        );
-    };
+  return (
+    <div>
+    <div className="flex justify-center items-center min-h-screen">
+    <p className='text-3xl font-semibold flex justify-center text-center '>DashBoard</p>
+      <div className="grid grid-cols-2 grid-rows- gap-4">
+        
+        <Link to="/rentals">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:shadow-lg">
+            View Rentals
+          </button>
+        </Link>
+        <Link to="/bookings">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:shadow-lg">
+            View Bookings
+          </button>
+        </Link>
+        <Link to="/manage-listings">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:shadow-lg">
+            Manage Listings
+          </button>
+        </Link>
+        <Link to="/favorites">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:shadow-lg">
+            View Favorites
+          </button>
+        </Link>
+        <Link to="/account-settings">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:shadow-lg">
+            Account Settings
+          </button>
+        </Link>
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 text-white px-4 py-2 rounded-lg hover:shadow-lg"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+    </div>
+  );
+};
 
 export default DashboardPage;

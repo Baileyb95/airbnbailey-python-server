@@ -6,6 +6,7 @@ const LoginPage = () => {
         email: '',
         password: '',
     });
+    const [error, setError] = useState('');
 
     const navigate = useNavigate();
 
@@ -32,47 +33,55 @@ const LoginPage = () => {
                 navigate('/dashboard');
             } else if (response.status === 401) {
                 // Unauthorized login
-                // Handle this case, such as displaying an error message
+                setError('Email or password is incorrect. Please try again.');
             } else {
                 // Handle other login errors
-                // For example, show an error message if login fails for any other reason
+                setError('An error occurred during login. Please try again later.');
             }
         })
         .catch(error => {
             // Handle fetch error
             console.error('Login error:', error);
+            setError('An error occurred during login. Please try again later.');
         });
     };
 
     return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <button type="submit">Login</button>
-            </form>
-            <p>Don't have an account? <Link to="/register">Register</Link></p>
+        <div className="flex justify-center items-center h-screen">
+            <div className="bg-white rounded-lg shadow-lg p-8">
+                <h2 className="text-2xl font-semibold mb-4">Login</h2>
+                {error && <p className="text-red-500 mb-4">{error}</p>}
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-4">
+                        <label htmlFor="email" className="block">Email:</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="password" className="block">Password:</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
+                        />
+                    </div>
+                    <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        Login
+                    </button>
+                </form>
+                <p className="mt-4">Don't have an account? <Link to="/register" className="text-blue-500">Register</Link></p>
+            </div>
         </div>
     );
 };

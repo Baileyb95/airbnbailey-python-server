@@ -33,29 +33,34 @@ const Favorites = () => {
   };
 
   return (
-    <>
+    <div>
       <Header />
-      <div className="favorites">
-        <h1>Favorites</h1>
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Favorites</h1>
         {favorites.map((favorite) => (
-          <div key={favorite.id} className="favorite">
-            <h2>Favorite: {favorite.title}</h2>
+          <div key={favorite.id} className="bg-white rounded-lg shadow-md p-4 mb-4">
+            <h2 className="text-xl font-semibold mb-2">{favorite.title}</h2>
             {favorite.image_url && (
               <div>
-                <p>Image: <img src={favorite.image_url} alt="Listing" /></p>
+                <img src={favorite.image_url} alt="Listing" className="mb-2 rounded" />
               </div>
             )}
-            <p>Description: {favorite.description}</p>
-            <p>Address: {favorite.address}</p>
-            <p>City: {favorite.city}</p>
-            <p>State: {favorite.state}</p>
-            <p>Zip Code: {favorite.zip_code}</p>
-            <p>Price: {favorite.price}</p>
-            <button onClick={() => handleDeleteFavorite(favorite.id)}>Delete</button>
+            <p className="text-gray-600">Description: {favorite.description}</p>
+            <p className="text-gray-600">Address: {favorite.address}</p>
+            <p className="text-gray-600">City: {favorite.city}</p>
+            <p className="text-gray-600">State: {favorite.state}</p>
+            <p className="text-gray-600">Zip Code: {favorite.zip_code}</p>
+            <p className="text-gray-600">Price: {favorite.price}</p>
+            <button
+              onClick={() => handleDeleteFavorite(favorite.id)}
+              className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600"
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

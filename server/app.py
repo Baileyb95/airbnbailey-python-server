@@ -66,15 +66,24 @@ def update_user(user_id):
 
 @app.route("/user/<string:user_id>", methods=["DELETE"])
 def delete_user(user_id):
-    user = User.query.get(user_id)
-    if user:
-        Listing.query.filter_by(user_id=user_id).delete()
-        Booking.query.filter_by(user_id=user_id).delete()
-        db.session.delete(user)
-        db.session.commit()
-        return jsonify({'message': 'User deleted successfully'})
-    else:
-        return jsonify({'message': 'User not found'}, 404)
+   user = User.query.get(user_id)
+   if user:
+       # Get all listings associated with the user
+       listings = Listing.query.filter_by(user_id=user_id).all()
+       
+       # Loop through each listing and delete associated bookings
+       for listing in listings:
+           Booking.query.filter_by(listing_id=listing.id).delete()
+       
+       # Delete the listings
+       Listing.query.filter_by(user_id=user_id).delete()
+       
+       # Delete the user
+       db.session.delete(user)
+       db.session.commit()
+       return jsonify({'message': 'User deleted successfully'})
+   else:
+       return jsonify({'message': 'User not found'}, 404)
     
 
 @app.route("/user/<string:user_id>/listings", methods=["GET"])
