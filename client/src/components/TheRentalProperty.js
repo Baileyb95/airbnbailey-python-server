@@ -11,6 +11,7 @@ const TheRentalProperty = () => {
   const [checkOutDate, setCheckOutDate] = useState(new Date());
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [booking, setBooking] = useState(null);
+  const [confirmationMessage, setConfirmationMessage] = useState("");
   const [favoriteNotification, setFavoriteNotification] = useState("");
 
   const handleBooking = (listingId) => {
@@ -39,6 +40,10 @@ const TheRentalProperty = () => {
         .then((data) => {
           console.log(data);
           setIsBookingModalOpen(false);
+          setConfirmationMessage("Booking confirmed");
+          setTimeout(() => {
+            setConfirmationMessage("");
+          }, 3000);
         });
     } else {
       alert("Please select a check-in and check-out date.");
@@ -128,7 +133,7 @@ const TheRentalProperty = () => {
                 </div>
                 <div className="booking-modal-body">
                   <div className="booking-modal-inputs">
-                    <label htmlFor="check-in">Check In:</label>
+                    <label htmlFor="check-in" className="block mt-4">Check In:</label>
                     <DatePicker
                       selected={checkInDate}
                       onChange={(date) => setCheckInDate(date)}
@@ -137,8 +142,9 @@ const TheRentalProperty = () => {
                       endDate={checkOutDate}
                       dateFormat="MM/dd/yyyy"
                       showTimeSelect={false}
+                      className="border border-gray-300 rounded px-3 py-2 mt-2"
                     />
-                    <label htmlFor="check-out">Check Out:</label>
+                    <label htmlFor="check-out" className="block mt-4">Check Out:</label>
                     <DatePicker
                       selected={checkOutDate}
                       onChange={(date) => setCheckOutDate(date)}
@@ -147,6 +153,7 @@ const TheRentalProperty = () => {
                       endDate={checkOutDate}
                       dateFormat="MM/dd/yyyy"
                       showTimeSelect={false}
+                      className="border border-gray-300 rounded px-3 py-2 mt-2"
                     />
                   </div>
                   <div className="booking-modal-buttons">
@@ -165,6 +172,13 @@ const TheRentalProperty = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* Display confirmation message */}
+          {confirmationMessage && (
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 shadow-lg rounded text-green-500">
+              {confirmationMessage}
             </div>
           )}
         </div>
