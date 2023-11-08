@@ -9,7 +9,7 @@ const Header = () => {
       method: 'DELETE'
     })
       .then(() => {
-        navigate('/');
+        navigate('/airbnbailey');
       })
       .catch((error) => {
         console.error('Error logging out:', error);

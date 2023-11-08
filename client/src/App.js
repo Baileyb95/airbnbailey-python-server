@@ -27,7 +27,7 @@ function App() {
         <Routes>
                 <Route path="/favorites" element={<Favorites favorites={favorites} handleAddToFavorites={handleAddToFavorites}/>} />
                 <Route path="/rentals/:id" element={<TheRentalProperty/>} />
-                <Route path="/" element ={<HomePage/>} />
+                <Route path="/airbnbailey" element ={<HomePage/>} />
                 <Route path="/register" element={<RegisterPage/>} />
                 <Route path="/login" element={<LoginPage/>} />
                 <Route path="/dashboard" element={<DashboardPage/>} />
