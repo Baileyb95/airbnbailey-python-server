@@ -87,7 +87,7 @@ const AccountSettings = () => {
           // Handle the error, e.g., display an error message to the user
         })
         .finally(() => {
-          navigate('/');
+          navigate('/airbnbailey');
           window.location.reload();
           setConfirmation(false);
         });

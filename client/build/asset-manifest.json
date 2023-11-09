@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/airbnbailey/static/css/main.c879adf2.css",
+    "main.js": "/airbnbailey/static/js/main.ec0fe1c8.js",
+    "static/js/787.cce979ee.chunk.js": "/airbnbailey/static/js/787.cce979ee.chunk.js",
+    "index.html": "/airbnbailey/index.html",
+    "main.c879adf2.css.map": "/airbnbailey/static/css/main.c879adf2.css.map",
+    "main.ec0fe1c8.js.map": "/airbnbailey/static/js/main.ec0fe1c8.js.map",
+    "787.cce979ee.chunk.js.map": "/airbnbailey/static/js/787.cce979ee.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c879adf2.css",
+    "static/js/main.ec0fe1c8.js"
+  ]
+}
