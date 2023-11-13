@@ -10,3 +10,7 @@ flask-cors
 flask-migrate
 flask-jwt-extended
 flask-wtf
+gunicorn
+psycopg2-binary
+flask-migrate
+sqlalchemy-serializer

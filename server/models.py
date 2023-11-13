@@ -1,7 +1,9 @@
-from flask_sqlalchemy import SQLAlchemy
+from config import bcrypt, db
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import validates
+from sqlalchemy_serializer import SerializerMixin
 from uuid import uuid4
 
-db = SQLAlchemy()
 
 def get_uuid():
     return uuid4().hex
@@ -11,7 +13,7 @@ favorites_association = db.Table('favorites_association',
     db.Column('listing_id', db.Integer, db.ForeignKey('listings.id'))
 )
 
-class User(db.Model):
+class User(db.Model, SerializerMixin):
     __tablename__ = "users"
     id = db.Column(db.String(32), primary_key=True, unique=True, default=get_uuid)
     email = db.Column(db.String(345), unique=True)
@@ -35,7 +37,7 @@ class User(db.Model):
         }
 
 
-class Booking(db.Model):
+class Booking(db.Model, SerializerMixin):
     __tablename__ = "bookings"
     id = db.Column(db.String(32), primary_key=True, unique=True, default=get_uuid)
     user_id = db.Column(db.String(32), db.ForeignKey("users.id"), nullable=False)
@@ -55,7 +57,7 @@ class Booking(db.Model):
             'check_out': self.check_out,
             'listing': self.listing.to_dict() if self.listing else None
         }
-class Review(db.Model):
+class Review(db.Model, SerializerMixin):
     __tablename__ = "reviews"
     id = db.Column(db.String(32), primary_key=True, unique=True, default=get_uuid)
     user_id = db.Column(db.String(32), db.ForeignKey("users.id"), nullable=False)
@@ -73,7 +75,7 @@ class Review(db.Model):
             'comment': self.comment
         }
 
-class Listing(db.Model):
+class Listing(db.Model, SerializerMixin):
     __tablename__ = "listings"
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(32), db.ForeignKey("users.id"), nullable=False)

@@ -9,7 +9,7 @@ const DisplayRentals = ({ list }) => {
   const [notificationMessage, setNotificationMessage] = useState('');
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/listings')
+    fetch('/listings')
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -26,7 +26,7 @@ const DisplayRentals = ({ list }) => {
       listing_id: listingId,
     };
 
-    fetch('http://127.0.0.1:5000/favorites', {
+    fetch('/favorites', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

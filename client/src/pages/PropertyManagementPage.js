@@ -23,7 +23,7 @@ const PropertyManagementPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent the default form submission
     const addUserToFormData = { ...formData, user_id: localStorage.id };
-    fetch('http://127.0.0.1:5000/listings', {
+    fetch('/listings', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

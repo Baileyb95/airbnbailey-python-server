@@ -5,7 +5,7 @@ const DashboardPage = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    fetch('http://127.0.0.1:5000/logout', {
+    fetch('/logout', {
       method: 'DELETE'
     })
       .then(() => {

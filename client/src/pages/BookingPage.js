@@ -6,7 +6,7 @@ const Bookings = () => {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:5000/user/${localStorage.getItem('id')}/bookings`)
+    fetch(`/user/${localStorage.getItem('id')}/bookings`)
       .then((response) => response.json())
       .then((data) => {
         setBookings(data);
@@ -17,7 +17,7 @@ const Bookings = () => {
   }, []);
 
   const handleDeleteListing = (listingId) => {
-    fetch(`http://127.0.0.1:5000/user/${localStorage.getItem('id')}/bookings/${listingId}`, {
+    fetch(`/user/${localStorage.getItem('id')}/bookings/${listingId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

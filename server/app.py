@@ -1,23 +1,15 @@
 from flask import Flask, request, jsonify, session, make_response
-from flask_bcrypt import Bcrypt
 from flask_cors import CORS, cross_origin
 from flask_session import Session
-from config import ApplicationConfig
+from flask_restful import Resource
+from config import api, app, db 
 from models import db, User, Listing, Booking, Review
 from datetime import datetime
-import os
-from pdb import set_trace as PDB
-app = Flask(__name__)
-app.config.from_object(ApplicationConfig)
 
 Session(app)
 
-#app.secret_key = os.urandom(16).hex()
-
-bcrypt = Bcrypt(app)
 CORS(app, supports_credentials=True)
 cross_origin(supports_credentials=True)
-db.init_app(app)
 
 with app.app_context():
     db.create_all()
@@ -108,7 +100,7 @@ def register_user():
     if user_exists:
         return jsonify({"error": "User already exists"}), 409
 
-    hashed_password = bcrypt.generate_password_hash(password)
+    hashed_password = app.generate_password_hash(password)
     new_user = User(email=email, password=hashed_password, first_name=first_name, last_name=last_name, phone_number=phone_number)
     db.session.add(new_user)
     db.session.commit()
@@ -132,7 +124,7 @@ def login_user():
         if user is None:
             return jsonify({"error": "Unauthorized"}), 401
 
-        if not bcrypt.check_password_hash(user.password, password):
+        if not app.check_password_hash(user.password, password):
             return jsonify({"error": "Unauthorized"}), 401
 
         return jsonify({
@@ -370,4 +362,4 @@ def remove_favorite(user_id, listing_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5555)

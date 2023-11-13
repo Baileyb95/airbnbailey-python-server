@@ -6,7 +6,7 @@ const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:5000/favorites/${localStorage.getItem('id')}`)
+    fetch(`/favorites/${localStorage.getItem('id')}`)
       .then((response) => response.json())
       .then((data) => {
         setFavorites(data);
@@ -17,7 +17,7 @@ const Favorites = () => {
   }, []);
 
   const handleDeleteFavorite = (listingId) => {
-    fetch(`http://127.0.0.1:5000/favorites/${localStorage.getItem('id')}/${listingId}`, {
+    fetch(`/favorites/${localStorage.getItem('id')}/${listingId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

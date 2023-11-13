@@ -23,7 +23,7 @@ const RegisterPage = () => {
         e.preventDefault();
 
         // Send registration data to the backend
-        fetch('http://127.0.0.1:5000/register', {
+        fetch('/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

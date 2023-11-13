@@ -16,7 +16,7 @@ const Listings = () => {
   });
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:5000/user/${localStorage.getItem('id')}/listings`)
+    fetch(`/user/${localStorage.getItem('id')}/listings`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -28,7 +28,7 @@ const Listings = () => {
   }, []);
 
   const handleDeleteListing = (id) => {
-    fetch(`http://127.0.0.1:5000/listings/${id}`, {
+    fetch(`/listings/${id}`, {
       method: 'DELETE',
     })
       .then((response) => response.json())
@@ -78,7 +78,7 @@ const Listings = () => {
 
     const addUserToFormData = { ...updatedData, user_id: localStorage.id };
 
-    fetch(`http://127.0.0.1:5000/listings/${selectedListing.id}`, {
+    fetch(`/listings/${selectedListing.id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',

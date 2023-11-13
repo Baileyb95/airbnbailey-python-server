@@ -17,7 +17,7 @@ const AccountSettings = () => {
   useEffect(() => {
     // Fetch user data based on their user ID (assuming you have the user's ID in localStorage)
 
-    fetch(`http://127.0.0.1:5000/user/${localStorage.getItem('id')}`)
+    fetch(`/user/${localStorage.getItem('id')}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -51,7 +51,7 @@ const AccountSettings = () => {
     }
 
 
-    fetch(`http://127.0.0.1:5000/user/${localStorage.getItem('id')}`, {
+    fetch(`/user/${localStorage.getItem('id')}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ const AccountSettings = () => {
 
   const handleDeleteUser = () => {
     if (confirmation) {
-      fetch(`http://127.0.0.1:5000/user/${localStorage.id}`, {
+      fetch(`/user/${localStorage.id}`, {
         method: 'DELETE',
       })
         .then((response) => response.json())

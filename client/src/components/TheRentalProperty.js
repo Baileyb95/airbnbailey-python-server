@@ -29,7 +29,7 @@ const TheRentalProperty = () => {
 
       const addUserToFormData = { ...bookingData, user_id: localStorage.id };
 
-      fetch("http://127.0.0.1:5000/bookings", {
+      fetch("/bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +51,7 @@ const TheRentalProperty = () => {
   };
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:5000/listings/${id}`)
+    fetch(`/listings/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw Error("Network response was not ok");
@@ -73,7 +73,7 @@ const TheRentalProperty = () => {
       listing_id: listingId,
     };
 
-    fetch("http://127.0.0.1:5000/favorites", {
+    fetch("/favorites", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
