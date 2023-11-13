@@ -5,6 +5,8 @@ from config import api, app, db
 from models import db, User, Listing, Booking
 from datetime import datetime
 
+
+
 Session(app)
 
 CORS(app, supports_credentials=True)
@@ -26,9 +28,9 @@ def get_current_user():
         "email": user.email
     }) 
 
-# @app.route("/@me")
-# def home():
-#     return "Hello World"
+@app.route("/")
+def home():
+    return "Hello World"
 
 @app.route("/user/", methods=["GET"])
 def get_user():
@@ -365,4 +367,4 @@ def remove_favorite(user_id, listing_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5555)
+    app.run(port=5555, debug=True)
