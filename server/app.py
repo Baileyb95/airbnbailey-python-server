@@ -6,30 +6,30 @@ from config import api, app, db
 from models import db, User, Listing, Booking, Review
 from datetime import datetime
 
-# Session(app)
+Session(app)
 
-# CORS(app, supports_credentials=True)
-# cross_origin(supports_credentials=True)
+CORS(app, supports_credentials=True)
+cross_origin(supports_credentials=True)
 
-# with app.app_context():
-#     db.create_all()
-
-# @app.route("/@me")
-# def get_current_user():
-#     user_id = session.get("user_id")
-
-#     if not user_id:
-#         return jsonify({"error": "Unauthorized"}), 401
-    
-#     user = User.query.filter_by(id=user_id).first()
-#     return jsonify({
-#         "id": user.id,
-#         "email": user.email
-#     }) 
+with app.app_context():
+    db.create_all()
 
 @app.route("/@me")
-def home():
-    return "Hello World"
+def get_current_user():
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    user = User.query.filter_by(id=user_id).first()
+    return jsonify({
+        "id": user.id,
+        "email": user.email
+    }) 
+
+# @app.route("/@me")
+# def home():
+#     return "Hello World"
 
 @app.route("/user/", methods=["GET"])
 def get_user():
