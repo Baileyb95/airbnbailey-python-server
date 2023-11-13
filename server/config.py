@@ -26,6 +26,5 @@ bcrypt = Bcrypt(app)
 
 db.init_app(app)
 
-# below, we monkey-patch flask-restful's Api class to overwrite it's error_router with Flask's native error handler so that we can use the custom errorhandler we've registered on app
 Api.error_router = lambda self, handler, e: handler(e)
 api = Api(app)

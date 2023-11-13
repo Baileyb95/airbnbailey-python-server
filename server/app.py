@@ -1,9 +1,8 @@
 from flask import Flask, request, jsonify, session, make_response
 from flask_cors import CORS, cross_origin
 from flask_session import Session
-from flask_restful import Resource
 from config import api, app, db 
-from models import db, User, Listing, Booking, Review
+from models import db, User, Listing, Booking
 from datetime import datetime
 
 Session(app)
@@ -366,4 +365,4 @@ def remove_favorite(user_id, listing_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8000)
+    app.run(debug=True, port=5555)
