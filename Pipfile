@@ -15,8 +15,10 @@ flask-cors = "*"
 flask-migrate = "*"
 flask-jwt-extended = "*"
 flask-wtf = "*"
+gunicorn = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.8"
+python_full_version = "3.8.13"
